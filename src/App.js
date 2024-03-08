@@ -8,6 +8,7 @@ const Signup = React.lazy(() => import("./components/common/signup"))
 const EmailVerification = React.lazy(() => import("./components/common/emailVerification"))
 const ForgotPassword = React.lazy(() => import("./components/users/forgotPassword"))
 const ResetPassword = React.lazy(() => import("./components/users/resetPassword"))
+const Dashboard = React.lazy(() => import("./components/product/dashboard"))
 function App() {
   const antIcon = (
     <LoadingOutlined
@@ -33,6 +34,7 @@ function App() {
         <Route path="/confirm-email" element={<EmailVerification/>} />
         <Route path="/forgot-password" element={<ForgotPassword/>} />
         <Route path="/reset-password" element={<ResetPassword/>} />
+        <Route path="/" element={<Dashboard/>} />
       </Routes>
       </Suspense>
     </Router>

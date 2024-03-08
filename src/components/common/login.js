@@ -54,7 +54,7 @@ export default function Login() {
         localStorage.clear();
         localStorage.setItem("token", access_token);
         setTimeout(() => {
-          navigate("/signup");
+          navigate("/");
         }, 1000);
       }
     } catch (err) {
@@ -85,6 +85,7 @@ export default function Login() {
           <Card style={{ width: "25rem" }}>
             <Card.Body>
               <Card.Title>Login</Card.Title>
+              <div>
               <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="email">
                   <Form.Label>Email</Form.Label>
@@ -110,22 +111,25 @@ export default function Login() {
                   </Card.Link>
                 </Card.Text>
                 <Button
-                  style={{ marginTop: "10px" }}
+                  // style={{ marginTop: "10px" }}
                   variant="info"
                   type="submit"
                   disabled={!validateForm()}
                 >
                   Login
                 </Button>
+              </Form>
+              <div style={{marginLeft: "88px", marginTop: "-39px"}}>
                 <Button
-                  style={{ marginTop: "10px", marginLeft: "20px" }}
+                  style={{ marginTop: "0", marginLeft: "0px" }}
                   variant="secondary"
                   type="submit"
                   onClick={handleSignup}
                 >
                   Signup
                 </Button>
-              </Form>
+                </div>
+              </div>
             </Card.Body>
           </Card>
         </div>
