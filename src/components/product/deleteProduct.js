@@ -38,7 +38,7 @@ function DeleteProduct({ visible, onCancel, id, product, setProduct }) {
         title="Confirm deletion"
         open={visible}
         footer={[
-          <div>
+          <div key={id}>
             <Button
               type="primary"
               danger

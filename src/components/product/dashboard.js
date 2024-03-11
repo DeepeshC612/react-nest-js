@@ -12,7 +12,8 @@ import {
   LogoutOutlined,
   EyeOutlined,
   DeleteOutlined,
-  EditOutlined
+  EditOutlined,
+  ShoppingCartOutlined,
 } from "@ant-design/icons";
 import {
   notification,
@@ -24,20 +25,17 @@ import {
   Row,
   Button,
   Avatar,
+  Badge,
 } from "antd";
 import EditProduct from "./editProduct";
 
 const { Header, Content, Sider } = Layout;
 const { Meta } = Card;
-const sideBarItems = [DropboxOutlined, LogoutOutlined].map((icon, index) => ({
-  key: String(index + 1),
-  icon: React.createElement(icon),
-  label: index === 0 ? "Product" : "Logout",
-}));
 
 export default function Dashboard() {
   const [isLoading, SetIsLoading] = useState(false);
   const [addProductModal, setAddProductModal] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
   const [viewProductModal, setViewProductModal] = useState(false);
   const [deleteProductModal, setDeleteProductModal] = useState(false);
   const [editProductModal, setEditProductModal] = useState(false);
@@ -46,6 +44,22 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
 
+  const handleLogout = () => {
+    localStorage.clear();
+    openNotification({ message: "Logout", type: "success" });
+    setTimeout(() => {
+      navigate("/login");
+    }, 500);
+  };
+  const handelProduct = () => {
+    navigate("/");
+  };
+  const sideBarItems = [DropboxOutlined, LogoutOutlined].map((icon, index) => ({
+    key: String(index + 1),
+    icon: React.createElement(icon),
+    label: index === 0 ? "Product" : "Logout",
+    onClick: index === 1 ? handleLogout : handelProduct,
+  }));
   useEffect(() => {
     SetIsLoading(true);
     const token = localStorage.getItem("token");
@@ -62,6 +76,7 @@ export default function Dashboard() {
         const { status, data } = res?.data;
         if (status) {
           SetIsLoading(false);
+          setCartCount(localStorage.getItem('cartCount'))
           setProducts(data);
         }
       } catch (err) {
@@ -88,7 +103,7 @@ export default function Dashboard() {
     try {
       if (id) {
         const token = localStorage.getItem("token");
-        const res = await productAPI(id, token, "GET", '');
+        const res = await productAPI(id, token, "GET", "");
         if (res) {
           setProduct(res);
         }
@@ -104,18 +119,18 @@ export default function Dashboard() {
   };
 
   const showEditProduct = async (data, e) => {
-    if(e) {
-      setProduct(e)
+    if (e) {
+      setProduct(e);
     }
-    setEditProductModal(data)
-  }
+    setEditProductModal(data);
+  };
 
   const showDeleteProduct = async (data, id) => {
     if (id) {
-      setProduct(id)
+      setProduct(id);
     }
-    setDeleteProductModal(data)
-  }
+    setDeleteProductModal(data);
+  };
 
   const openNotification = (data) => {
     api.open({
@@ -158,7 +173,7 @@ export default function Dashboard() {
           <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={["4"]}
+            defaultSelectedKeys={["1"]}
             items={sideBarItems}
           />
         </Sider>
@@ -175,6 +190,11 @@ export default function Dashboard() {
               background: "#fff",
             }}
           >
+            <div style={{ position: "absolute", right: 140, marginTop: "2px" }}>
+              <Badge count={cartCount}>
+                <ShoppingCartOutlined key="cart" style={{ fontSize: "28px" }} />
+              </Badge>
+            </div>
             <Button
               style={{ position: "absolute", top: 15, right: 10 }}
               type="primary"
@@ -209,7 +229,7 @@ export default function Dashboard() {
               </div>
               <Row>
                 {products.map((e, index) => (
-                  <div key={e?.id} style={{ marginTop: "15px" }}>
+                  <div key={index} style={{ marginTop: "15px" }}>
                     <Col span={8}>
                       <Card
                         bordered={false}
@@ -231,8 +251,16 @@ export default function Dashboard() {
                             key="view"
                             onClick={() => showViewProduct(true, e?.id)}
                           />,
-                          <EditOutlined key="edit" onClick={() => {showEditProduct(true, e)}}/>,
-                          <DeleteOutlined key="delete" onClick={() => showDeleteProduct(true, e?.id)} />,
+                          <EditOutlined
+                            key="edit"
+                            onClick={() => {
+                              showEditProduct(true, e);
+                            }}
+                          />,
+                          <DeleteOutlined
+                            key="deleted"
+                            onClick={() => showDeleteProduct(true, e?.id)}
+                          />,
                         ]}
                       >
                         <Meta
@@ -268,6 +296,8 @@ export default function Dashboard() {
             visible={viewProductModal}
             onCancel={() => showViewProduct(false, null)}
             product={product}
+            cartCount={cartCount}
+            setCartCount={setCartCount}
           />
           <DeleteProduct
             visible={deleteProductModal}
