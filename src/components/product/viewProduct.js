@@ -2,7 +2,7 @@ import { Button, Modal, notification } from "antd";
 import React from "react";
 import { cartAPI } from "../../services/cartApi";
 
-function ViewProduct({ visible, onCancel, product, cartCount, setCartCount }) {
+function ViewProduct({ visible, onCancel, product, setCartCount, setCartList }) {
   const [api, contextHolder] = notification.useNotification();
   const openNotification = (data) => {
     api.open({
@@ -20,9 +20,8 @@ function ViewProduct({ visible, onCancel, product, cartCount, setCartCount }) {
       };
       const res = await cartAPI("", token, "POST", payload);
       if (res) {
-        let count = +cartCount + 1
-        localStorage.setItem("cartCount", count);
-        setCartCount(localStorage.getItem("cartCount"));
+        setCartList([...res])
+        setCartCount(res?.length);
       }
     } catch (err) {
       const data = {

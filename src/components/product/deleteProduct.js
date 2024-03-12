@@ -42,12 +42,13 @@ function DeleteProduct({ visible, onCancel, id, product, setProduct }) {
             <Button
               type="primary"
               danger
+              key={product[0]?.id}
               style={{ marginRight: "5px" }}
               onClick={() => handleOk(id)}
             >
               Ok
             </Button>
-            <Button type="primary" onClick={onCancel}>
+            <Button type="primary" key={product[0]?.productName} onClick={onCancel}>
               Cancel
             </Button>
           </div>,

@@ -18,9 +18,10 @@ export async function cartAPI(id, token, method, payload) {
   }
   const res = await axios(axiosConfig);
   const { status, data, message } = res?.data;
+  if (message === "Cart is empty") {
+    return data;
+  }
   if (status) {
-    if (method === "POST") {
-      return message;
-    }
+    return data;
   }
 }

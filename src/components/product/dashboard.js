@@ -6,6 +6,7 @@ import { productAPI } from "../../services/productApi";
 import DeleteProduct from "./deleteProduct";
 import AddProduct from "./addProduct";
 import ViewProduct from "./viewProduct";
+import ViewCart from "../cart/viewCart";
 import {
   LoadingOutlined,
   DropboxOutlined,
@@ -28,19 +29,23 @@ import {
   Badge,
 } from "antd";
 import EditProduct from "./editProduct";
+import { cartAPI } from "../../services/cartApi";
 
 const { Header, Content, Sider } = Layout;
 const { Meta } = Card;
 
 export default function Dashboard() {
-  const [isLoading, SetIsLoading] = useState(false);
-  const [addProductModal, setAddProductModal] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
-  const [viewProductModal, setViewProductModal] = useState(false);
-  const [deleteProductModal, setDeleteProductModal] = useState(false);
-  const [editProductModal, setEditProductModal] = useState(false);
-  const [products, setProducts] = useState([]);
   const [product, setProduct] = useState({});
+  const [catList, setCartList] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [cartCount, setCartCount] = useState(0);
+  const [isLoading, SetIsLoading] = useState(false);
+  const [viewCartModal, setViewCartModal] = useState(false);
+  const [addProductModal, setAddProductModal] = useState(false);
+  const [viewProductModal, setViewProductModal] = useState(false);
+  const [editProductModal, setEditProductModal] = useState(false);
+  const [deleteProductModal, setDeleteProductModal] = useState(false);
+
   const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
 
@@ -75,8 +80,13 @@ export default function Dashboard() {
         );
         const { status, data } = res?.data;
         if (status) {
+          let cart = await cartAPI('', token, "GET", '')
+          console.log(cart)
+          if(cart) {
+            setCartList(cart)
+          }
           SetIsLoading(false);
-          setCartCount(localStorage.getItem('cartCount'))
+          setCartCount(cart?.length)
           setProducts(data);
         }
       } catch (err) {
@@ -116,6 +126,10 @@ export default function Dashboard() {
       openNotification(data);
     }
     setViewProductModal(data);
+  };
+
+  const showCart = async (data) => {
+    setViewCartModal(data);
   };
 
   const showEditProduct = async (data, e) => {
@@ -192,7 +206,7 @@ export default function Dashboard() {
           >
             <div style={{ position: "absolute", right: 140, marginTop: "2px" }}>
               <Badge count={cartCount}>
-                <ShoppingCartOutlined key="cart" style={{ fontSize: "28px" }} />
+                <ShoppingCartOutlined key="cart" style={{ fontSize: "28px" }} onClick={() => showCart(true)}/>
               </Badge>
             </div>
             <Button
@@ -232,7 +246,7 @@ export default function Dashboard() {
                   <div key={index} style={{ marginTop: "15px" }}>
                     <Col span={8}>
                       <Card
-                        bordered={false}
+                        bordered={true}
                         style={{
                           width: 200,
                           marginInline: "10px",
@@ -296,8 +310,8 @@ export default function Dashboard() {
             visible={viewProductModal}
             onCancel={() => showViewProduct(false, null)}
             product={product}
-            cartCount={cartCount}
             setCartCount={setCartCount}
+            setCartList={setCartList}
           />
           <DeleteProduct
             visible={deleteProductModal}
@@ -312,6 +326,13 @@ export default function Dashboard() {
             clickedProduct={product}
             product={products}
             setProduct={setProducts}
+          />
+          <ViewCart
+            visible={viewCartModal}
+            onCancel={() => showCart(false)}
+            cart={catList}
+            setCartList={setCartList}
+            setCartCount={setCartCount}
           />
         </Layout>
       </Layout>
