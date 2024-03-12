@@ -15,6 +15,8 @@ import {
   DeleteOutlined,
   EditOutlined,
   ShoppingCartOutlined,
+  ShoppingOutlined,
+  ShoppingFilled,
 } from "@ant-design/icons";
 import {
   notification,
@@ -27,6 +29,7 @@ import {
   Button,
   Avatar,
   Badge,
+  Tooltip
 } from "antd";
 import EditProduct from "./editProduct";
 import { cartAPI } from "../../services/cartApi";
@@ -65,8 +68,10 @@ export default function Dashboard() {
     label: index === 0 ? "Product" : "Logout",
     onClick: index === 1 ? handleLogout : handelProduct,
   }));
+
   useEffect(() => {
     SetIsLoading(true);
+
     const token = localStorage.getItem("token");
     async function fetchData() {
       try {
@@ -80,14 +85,17 @@ export default function Dashboard() {
         );
         const { status, data } = res?.data;
         if (status) {
-          let cart = await cartAPI('', token, "GET", '')
-          console.log(cart)
-          if(cart) {
-            setCartList(cart)
+          setProducts(data);
+          let cart = await cartAPI("", token, "GET", "");
+          if (cart) {
+            setCartList(cart);
+            cart?.map((e) => {
+              handleIsClicked(e?.productId);
+              return e
+            });
           }
           SetIsLoading(false);
-          setCartCount(cart?.length)
-          setProducts(data);
+          setCartCount(cart?.length);
         }
       } catch (err) {
         const data = {
@@ -163,6 +171,59 @@ export default function Dashboard() {
     />
   );
 
+  const checkBagClicked = (id) => {
+    let data = false;
+    catList?.map((e) => {
+      if(e?.productId === id) {
+        data = true
+      }
+      return true
+    })
+    return data
+  }
+
+  function handleIsClicked(id, value) {
+    const findProduct = products.find((e) => e.id === id);
+    if (findProduct) {
+      findProduct["isClicked"] = value;
+    }
+  }
+
+  const handleIconClick = async (id, method) => {
+    try {
+      const token = localStorage.getItem("token");
+      const payload = {
+        productId: id,
+        quantity: 1,
+      };
+      let res
+      if(method === 'add') {
+        res = await cartAPI("", token, "POST", payload);
+        handleIsClicked(id, true);
+      } else {
+        res = await cartAPI(id, token, "DELETE", "");
+        handleIsClicked(id, false);
+      }
+      if (res) {
+        setCartList([...res]);
+        setCartCount(res?.length);
+      }
+    } catch (err) {
+      console.log(err);
+      const data = {
+        message: err?.response?.data?.error ?? err?.response?.data?.message,
+        type: "error",
+      };
+      openNotification(data);
+    }
+  };
+
+  function truncateText(text, limit) {
+    if (text.length <= limit) {
+      return text;
+    }
+    return text.slice(0, limit) + "....";
+  }
   return (
     <div>
       <Layout hasSider>
@@ -206,7 +267,11 @@ export default function Dashboard() {
           >
             <div style={{ position: "absolute", right: 140, marginTop: "2px" }}>
               <Badge count={cartCount}>
-                <ShoppingCartOutlined key="cart" style={{ fontSize: "28px" }} onClick={() => showCart(true)}/>
+                <ShoppingCartOutlined
+                  key="cart"
+                  style={{ fontSize: "28px" }}
+                  onClick={() => showCart(true)}
+                />
               </Badge>
             </div>
             <Button
@@ -261,20 +326,46 @@ export default function Dashboard() {
                           />
                         }
                         actions={[
-                          <EyeOutlined
-                            key="view"
-                            onClick={() => showViewProduct(true, e?.id)}
-                          />,
-                          <EditOutlined
-                            key="edit"
-                            onClick={() => {
-                              showEditProduct(true, e);
-                            }}
-                          />,
-                          <DeleteOutlined
-                            key="deleted"
-                            onClick={() => showDeleteProduct(true, e?.id)}
-                          />,
+                          <Tooltip title="View product">
+                            <EyeOutlined
+                              key="view"
+                              style={{ fontSize: "18px" }}
+                              onClick={() => showViewProduct(true, e?.id)}
+                            />
+                          </Tooltip>,
+                          <Tooltip title="Edit product">
+                            <EditOutlined
+                              key="edit"
+                              style={{ fontSize: "18px" }}
+                              onClick={() => {
+                                showEditProduct(true, e);
+                              }}
+                            />
+                          </Tooltip>,
+                          <Tooltip title="Add to Cart">
+                          <div style={{ marginTop: "5px" }}>
+                            {checkBagClicked(e?.id) ? (
+                              <ShoppingFilled
+                                key="cartAdd"
+                                style={{ fontSize: "18px" }}
+                                onClick={() => handleIconClick(e?.id, "")}
+                              />
+                            ) : (
+                              <ShoppingOutlined
+                                key="cartAdd"
+                                style={{ fontSize: "18px" }}
+                                onClick={() => handleIconClick(e?.id, "add")}
+                              />
+                            )}
+                          </div>
+                          </Tooltip>,
+                          <Tooltip title="Delete product">
+                            <DeleteOutlined
+                              key="deleted"
+                              style={{ fontSize: "18px" }}
+                              onClick={() => showDeleteProduct(true, e?.id)}
+                            />
+                          </Tooltip>
                         ]}
                       >
                         <Meta
@@ -291,7 +382,16 @@ export default function Dashboard() {
                             </Avatar>
                           }
                           title={e.productName}
-                          description={e.description}
+                          description={
+                            <div
+                              style={{
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                              }}
+                            >
+                              {truncateText(e.description, 15)}
+                            </div>
+                          }
                         />
                       </Card>
                     </Col>

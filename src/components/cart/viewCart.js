@@ -48,6 +48,12 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
       openNotification(data);
     }
   };
+  function truncateText(text, limit) {
+    if (text.length <= limit) {
+      return text;
+    }
+    return text.slice(0, limit) + '....';
+  }
   const SubTotal = cart.reduce((acc, index) => {
     return +acc + +index?.totalPrice;
   }, 0);
@@ -116,7 +122,7 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
                   {cart.productName}
                 </p>
                 <p style={{ color: "gray", marginBottom: "5px" }}>
-                  {cart.description}
+                  {truncateText(cart.description, 30)}
                 </p>
                 <p style={{ color: "gray", marginBottom: "5px" }}>
                   quantity: {cart.quantity}
