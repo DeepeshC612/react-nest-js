@@ -29,7 +29,7 @@ import {
   Button,
   Avatar,
   Badge,
-  Tooltip
+  Tooltip,
 } from "antd";
 import EditProduct from "./editProduct";
 import { cartAPI } from "../../services/cartApi";
@@ -91,7 +91,7 @@ export default function Dashboard() {
             setCartList(cart);
             cart?.map((e) => {
               handleIsClicked(e?.productId);
-              return e
+              return e;
             });
           }
           SetIsLoading(false);
@@ -174,13 +174,13 @@ export default function Dashboard() {
   const checkBagClicked = (id) => {
     let data = false;
     catList?.map((e) => {
-      if(e?.productId === id) {
-        data = true
+      if (e?.productId === id) {
+        data = true;
       }
-      return true
-    })
-    return data
-  }
+      return true;
+    });
+    return data;
+  };
 
   function handleIsClicked(id, value) {
     const findProduct = products.find((e) => e.id === id);
@@ -196,8 +196,8 @@ export default function Dashboard() {
         productId: id,
         quantity: 1,
       };
-      let res
-      if(method === 'add') {
+      let res;
+      if (method === "add") {
         res = await cartAPI("", token, "POST", payload);
         handleIsClicked(id, true);
       } else {
@@ -342,30 +342,32 @@ export default function Dashboard() {
                               }}
                             />
                           </Tooltip>,
-                          <Tooltip title="Add to Cart">
-                          <div style={{ marginTop: "5px" }}>
+                          <div style={{ marginTop: "3px" }}>
                             {checkBagClicked(e?.id) ? (
-                              <ShoppingFilled
-                                key="cartAdd"
-                                style={{ fontSize: "18px" }}
-                                onClick={() => handleIconClick(e?.id, "")}
-                              />
+                              <Tooltip title="Remove from Cart">
+                                <ShoppingFilled
+                                  key="cartAdd"
+                                  style={{ fontSize: "20px" }}
+                                  onClick={() => handleIconClick(e?.id, "")}
+                                />
+                              </Tooltip>
                             ) : (
-                              <ShoppingOutlined
-                                key="cartAdd"
-                                style={{ fontSize: "18px" }}
-                                onClick={() => handleIconClick(e?.id, "add")}
-                              />
+                              <Tooltip title="Add to Cart">
+                                <ShoppingOutlined
+                                  key="cartAdd"
+                                  style={{ fontSize: "20px" }}
+                                  onClick={() => handleIconClick(e?.id, "add")}
+                                />
+                              </Tooltip>
                             )}
-                          </div>
-                          </Tooltip>,
+                          </div>,
                           <Tooltip title="Delete product">
                             <DeleteOutlined
                               key="deleted"
                               style={{ fontSize: "18px" }}
                               onClick={() => showDeleteProduct(true, e?.id)}
                             />
-                          </Tooltip>
+                          </Tooltip>,
                         ]}
                       >
                         <Meta

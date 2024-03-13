@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "react-bootstrap";
 import { getEnv } from "../../config/config";
 import axios from "axios";
+import { login } from "../../slice/auth/auth.slices";
+import { useDispatch, useSelector } from "react-redux";
 import { LoadingOutlined } from "@ant-design/icons";
 import { notification, Spin } from "antd";
 
@@ -15,6 +17,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
 
+  const dispatch = useDispatch()
   const openNotification = (data) => {
     api.open({
       type: data?.type,
@@ -51,6 +54,7 @@ export default function Login() {
       if (status) {
         SetIsLoading(true);
         openNotification({ type: "success", message: "Login success" });
+        dispatch(login(access_token))
         localStorage.clear();
         localStorage.setItem("token", access_token);
         setTimeout(() => {

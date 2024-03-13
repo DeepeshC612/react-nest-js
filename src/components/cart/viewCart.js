@@ -1,4 +1,4 @@
-import { Button, Modal, notification } from "antd";
+import { Button, Modal, notification, Tooltip } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import React from "react";
 import { cartAPI } from "../../services/cartApi";
@@ -52,7 +52,7 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
     if (text.length <= limit) {
       return text;
     }
-    return text.slice(0, limit) + '....';
+    return text.slice(0, limit) + "....";
   }
   const SubTotal = cart.reduce((acc, index) => {
     return +acc + +index?.totalPrice;
@@ -65,7 +65,12 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
         open={visible}
         footer={[
           <div>
-            <Button type="primary" key={cart?.id} style={{bottom: '10px'}} block>
+            <Button
+              type="primary"
+              key={cart?.id}
+              style={{ bottom: "10px" }}
+              block
+            >
               Checkout: {SubTotal} ₹
             </Button>
           </div>,
@@ -82,7 +87,16 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
         }}
       >
         {cart?.length === 0 && (
-          <div style={{position: 'absolute', top: '50%', left: '35%', fontSize: '22px'}}>Cart is empty...</div>
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "35%",
+              fontSize: "22px",
+            }}
+          >
+            Cart is empty...
+          </div>
         )}
         <div style={{ overflowY: "auto", height: "calc(100vh - 100px)" }}>
           {cart.map((cart, index) => (
@@ -137,25 +151,36 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
                   {cart.totalPrice}₹
                 </p>
                 <div style={{ position: "relative", marginTop: "-30px" }}>
-                  <Button
-                    size="middle"
-                    onClick={() => handleCart(cart?.productId, 1)}
-                  >
-                    +
-                  </Button>
-                  <Button
-                    style={{
-                      marginLeft: "5px",
-                      paddingLeft: "17px",
-                      paddingRight: "17px",
-                    }}
-                    onClick={() => handleCart(cart?.productId, -1)}
-                  >
-                    -
-                  </Button>
-                  <DeleteOutlined
-                    style={{ marginLeft: "10px", fontSize: "20px" }} onClick={()=> removeCart(cart?.productId)}
-                  />
+                  <Tooltip title="Add quantity" placement="bottom">
+                    <Button
+                      size="middle"
+                      onClick={() => handleCart(cart?.productId, 1)}
+                    >
+                      +
+                    </Button>
+                  </Tooltip>
+                  <Tooltip title="Remove quantity" placement="bottom">
+                    <Button
+                      style={{
+                        marginLeft: "5px",
+                        paddingLeft: "17px",
+                        paddingRight: "17px",
+                      }}
+                      onClick={() => handleCart(cart?.productId, -1)}
+                    >
+                      -
+                    </Button>
+                  </Tooltip>
+                  <Tooltip title="Remove product" placement="bottom">
+                    <DeleteOutlined
+                      style={{
+                        marginLeft: "10px",
+                        fontSize: "20px",
+                        color: "red",
+                      }}
+                      onClick={() => removeCart(cart?.productId)}
+                    />
+                  </Tooltip>
                 </div>
               </div>
             </div>

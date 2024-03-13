@@ -1,8 +1,14 @@
 import { Button, Modal, notification } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { cartAPI } from "../../services/cartApi";
 
-function ViewProduct({ visible, onCancel, product, setCartCount, setCartList }) {
+function ViewProduct({
+  visible,
+  onCancel,
+  product,
+  setCartCount,
+  setCartList,
+}) {
   const [api, contextHolder] = notification.useNotification();
   const openNotification = (data) => {
     api.open({
@@ -20,7 +26,7 @@ function ViewProduct({ visible, onCancel, product, setCartCount, setCartList }) 
       };
       const res = await cartAPI("", token, "POST", payload);
       if (res) {
-        setCartList([...res])
+        setCartList([...res]);
         setCartCount(res?.length);
       }
     } catch (err) {
@@ -55,9 +61,9 @@ function ViewProduct({ visible, onCancel, product, setCartCount, setCartList }) 
             <p>Product price: {product.price}₹</p>
             <p>Product description: {product.description}</p>
             <div style={{ marginTop: "10px" }}>
-              <Button type="primary" block onClick={handleCartCount}>
-                Add to Cart
-              </Button>
+                <Button type="primary" block onClick={handleCartCount}>
+                  Add to Cart
+                </Button>
             </div>
           </div>
         )}
