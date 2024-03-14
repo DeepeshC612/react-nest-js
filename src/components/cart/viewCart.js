@@ -5,6 +5,7 @@ import { cartAPI } from "../../services/cartApi";
 
 function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
   const [api, contextHolder] = notification.useNotification();
+  const token = localStorage.getItem("token");
   const openNotification = (data) => {
     api.open({
       type: data?.type,
@@ -14,7 +15,6 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
   };
   const handleCart = async (id, value) => {
     try {
-      const token = localStorage.getItem("token");
       const payload = {
         productId: id,
         quantity: Number(value),
@@ -34,7 +34,6 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
   };
   const removeCart = async (id) => {
     try {
-      const token = localStorage.getItem("token");
       const res = await cartAPI(id, token, "DELETE", "");
       if (res) {
         setCartList([...res]);

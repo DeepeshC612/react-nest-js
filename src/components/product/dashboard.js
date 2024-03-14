@@ -48,6 +48,7 @@ export default function Dashboard() {
   const [viewProductModal, setViewProductModal] = useState(false);
   const [editProductModal, setEditProductModal] = useState(false);
   const [deleteProductModal, setDeleteProductModal] = useState(false);
+  const token = localStorage.getItem("token");
 
   const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
@@ -71,8 +72,6 @@ export default function Dashboard() {
 
   useEffect(() => {
     SetIsLoading(true);
-
-    const token = localStorage.getItem("token");
     async function fetchData() {
       try {
         const res = await axios.get(
@@ -120,7 +119,6 @@ export default function Dashboard() {
   const showViewProduct = async (data, id) => {
     try {
       if (id) {
-        const token = localStorage.getItem("token");
         const res = await productAPI(id, token, "GET", "");
         if (res) {
           setProduct(res);
@@ -191,7 +189,6 @@ export default function Dashboard() {
 
   const handleIconClick = async (id, method) => {
     try {
-      const token = localStorage.getItem("token");
       const payload = {
         productId: id,
         quantity: 1,
