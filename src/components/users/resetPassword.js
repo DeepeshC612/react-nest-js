@@ -5,6 +5,7 @@ import { Card } from "react-bootstrap";
 import { getEnv } from "../../config/config";
 import axios from "axios";
 import { notification } from "antd";
+import { useNavigate } from "react-router-dom";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -12,6 +13,8 @@ export default function ResetPassword() {
   const [api, contextHolder] = notification.useNotification();
   const queryParams = new URLSearchParams(window.location.search);
   const token = queryParams.get("token");
+  const navigate = useNavigate();
+
   const openNotification = (data) => {
     api.open({
       type: data?.type,
@@ -43,6 +46,9 @@ export default function ResetPassword() {
       const { status, message } = res?.data;
       if (status) {
         openNotification({ type: "success", message: message });
+        setTimeout(() => {
+          navigate("/login");
+        }, 500);
       }
     } catch (err) {
       const data = {
