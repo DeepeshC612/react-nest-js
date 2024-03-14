@@ -33,6 +33,7 @@ import {
 } from "antd";
 import EditProduct from "./editProduct";
 import { cartAPI } from "../../services/cartApi";
+import { useSelector } from "react-redux";
 
 const { Header, Content, Sider } = Layout;
 const { Meta } = Card;
@@ -49,7 +50,7 @@ export default function Dashboard() {
   const [editProductModal, setEditProductModal] = useState(false);
   const [deleteProductModal, setDeleteProductModal] = useState(false);
   const token = localStorage.getItem("token");
-
+  const userData = useSelector((state) => state?.auth?.userData);
   const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
 
@@ -237,11 +238,32 @@ export default function Dashboard() {
           <div
             className="logo"
             style={{
-              height: "32px",
-              margin: "16px",
+              height: "50px",
+              marginTop: "16px",
+              marginLeft: "3px",
+              marginRight: "3px",
+              marginBottom: "16px",
+              borderRadius: "5px",
               background: "rgba(255, 255, 255, 0.2)",
             }}
-          />
+          >
+            <div style={{display: 'flex', alignItems: 'center'}}>
+            <img
+              src={userData?.profilePic}
+              style={{
+                borderRadius: "50%",
+                height: "40px",
+                width: "40px",
+                objectFit: "cover",
+                marginLeft: "3px",
+                marginRight: "5px",
+              }}
+            ></img>
+            <p style={{fontWeight: 'bold', marginTop: '12px', color: 'white'}}>
+            {userData?.name}
+            </p>
+            </div>
+          </div>
           <Menu
             theme="dark"
             mode="inline"

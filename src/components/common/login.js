@@ -50,11 +50,11 @@ export default function Login() {
         `${getEnv("REACT_APP_API_ENDPOINT")}/login`,
         payload
       );
-      const { status, access_token } = res?.data;
+      const { status, data, access_token } = res?.data;
       if (status) {
         SetIsLoading(true);
         openNotification({ type: "success", message: "Login success" });
-        dispatch(login(access_token))
+        dispatch(login(data));
         localStorage.clear();
         localStorage.setItem("token", access_token);
         setTimeout(() => {
