@@ -250,6 +250,7 @@ export default function Dashboard() {
             <div style={{display: 'flex', alignItems: 'center'}}>
             <img
               src={userData?.profilePic}
+              alt="profilePic"
               style={{
                 borderRadius: "50%",
                 height: "40px",
