@@ -9,12 +9,14 @@ import { login } from "../../slice/auth/auth.slices";
 import { useDispatch, useSelector } from "react-redux";
 import { LoadingOutlined } from "@ant-design/icons";
 import { notification, Spin } from "antd";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, SetIsLoading] = useState(false);
   const navigate = useNavigate();
+  const [isVerified, setVerified] = useState(false)
   const [api, contextHolder] = notification.useNotification();
 
   const dispatch = useDispatch()
@@ -46,20 +48,24 @@ export default function Login() {
       password: event.target.password.value,
     };
     try {
-      const res = await axios.post(
-        `${getEnv("REACT_APP_API_ENDPOINT")}/login`,
-        payload
-      );
-      const { status, data, access_token } = res?.data;
-      if (status) {
-        SetIsLoading(true);
-        openNotification({ type: "success", message: "Login success" });
-        dispatch(login(data));
-        localStorage.clear();
-        localStorage.setItem("token", access_token);
-        setTimeout(() => {
-          navigate("/");
-        }, 1000);
+      if(isVerified) {
+        const res = await axios.post(
+          `${getEnv("REACT_APP_API_ENDPOINT")}/login`,
+          payload
+        );
+        const { status, data, access_token } = res?.data;
+        if (status) {
+          SetIsLoading(true);
+          openNotification({ type: "success", message: "Login success" });
+          dispatch(login(data));
+          localStorage.clear();
+          localStorage.setItem("token", access_token);
+          setTimeout(() => {
+            navigate("/");
+          }, 1000);
+        }
+      } else {
+        openNotification({ type: "error", message: "Please verify captcha" });
       }
     } catch (err) {
       const data = { message: err?.response?.data?.error ?? err?.response?.data?.message, type: "error" };
@@ -67,6 +73,11 @@ export default function Login() {
     }
   }
 
+  const handleVerification = (token) => {
+    if(token) {
+      setVerified(true)
+    }
+  }
   function handleSignup() {
     navigate("/signup");
   }
@@ -114,6 +125,12 @@ export default function Login() {
                     forgot password!
                   </Card.Link>
                 </Card.Text>
+                <div>
+                  <HCaptcha
+                  sitekey={process.env.REACT_APP_SITE_KEY}
+                  onVerify={handleVerification}
+                  />
+                </div>
                 <Button
                   // style={{ marginTop: "10px" }}
                   variant="info"

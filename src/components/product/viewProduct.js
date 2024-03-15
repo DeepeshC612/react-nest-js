@@ -1,5 +1,5 @@
 import { Button, Modal, notification } from "antd";
-import React, { useState } from "react";
+import React from "react";
 import { cartAPI } from "../../services/cartApi";
 
 function ViewProduct({
