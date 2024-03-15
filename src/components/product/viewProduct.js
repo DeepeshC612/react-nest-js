@@ -1,6 +1,8 @@
 import { Button, Modal, notification } from "antd";
 import React from "react";
 import { cartAPI } from "../../services/cartApi";
+import { cartListAdd } from "../../slice/auth/auth.slices";
+import { useDispatch } from "react-redux";
 
 function ViewProduct({
   visible,
@@ -10,6 +12,7 @@ function ViewProduct({
   setCartList,
 }) {
   const [api, contextHolder] = notification.useNotification();
+  const dispatch = useDispatch();
   const openNotification = (data) => {
     api.open({
       type: data?.type,
@@ -26,8 +29,18 @@ function ViewProduct({
       };
       const res = await cartAPI("", token, "POST", payload);
       if (res) {
-        setCartList([...res]);
-        setCartCount(res?.length);
+        if (res[0]?.productId === product?.id) {
+          openNotification({ message: "Quantity updated", type: "success" });
+        } else {
+          openNotification({ message: "Added to cart", type: "success" });
+        }
+        if(typeof res === 'string') {
+          openNotification({ message: res, type: 'error'})
+        } else {
+          dispatch(cartListAdd(res));
+          setCartList([...res]);
+          setCartCount(res?.length);
+        }
       }
     } catch (err) {
       const data = {
@@ -61,9 +74,9 @@ function ViewProduct({
             <p>Product price: {product.price}₹</p>
             <p>Product description: {product.description}</p>
             <div style={{ marginTop: "10px" }}>
-                <Button type="primary" block onClick={handleCartCount}>
-                  Add to Cart
-                </Button>
+              <Button type="primary" block onClick={handleCartCount}>
+                Add to Cart
+              </Button>
             </div>
           </div>
         )}

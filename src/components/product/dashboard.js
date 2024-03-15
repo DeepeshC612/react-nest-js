@@ -203,11 +203,14 @@ export default function Dashboard() {
         handleIsClicked(id, false);
       }
       if (res) {
-        setCartList([...res]);
-        setCartCount(res?.length);
+        if(typeof res === 'string') {
+          openNotification({ message: res, type: 'error'})
+        } else {
+          setCartList([...res]);
+          setCartCount(res?.length);
+        }
       }
     } catch (err) {
-      console.log(err);
       const data = {
         message: err?.response?.data?.error ?? err?.response?.data?.message,
         type: "error",

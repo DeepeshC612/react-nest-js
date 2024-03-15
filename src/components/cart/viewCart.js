@@ -2,6 +2,7 @@ import { Button, Modal, notification, Tooltip } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import React from "react";
 import { cartAPI } from "../../services/cartApi";
+import { useSelector } from "react-redux";
 
 function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
   const [api, contextHolder] = notification.useNotification();
@@ -21,8 +22,12 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
       };
       const res = await cartAPI("", token, "POST", payload);
       if (res) {
-        setCartList([...res]);
-        setCartCount(res?.length);
+        if(typeof res === 'string') {
+          openNotification({ message: res, type: 'error'})
+        } else {
+          setCartList([...res]);
+          setCartCount(res?.length);
+        }
       }
     } catch (err) {
       const data = {
@@ -53,6 +58,7 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
     }
     return text.slice(0, limit) + "....";
   }
+  const cartData = useSelector((state) => state?.auth?.cartData)
   const SubTotal = cart.reduce((acc, index) => {
     return +acc + +index?.totalPrice;
   }, 0);

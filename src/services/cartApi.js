@@ -18,6 +18,9 @@ export async function cartAPI(id, token, method, payload) {
   }
   const res = await axios(axiosConfig);
   const { status, data, message } = res?.data;
+  if (message === "Product quantity is not sufficient or out of stock") {
+    return message
+  }
   if (message === "Cart is empty") {
     return data;
   }
