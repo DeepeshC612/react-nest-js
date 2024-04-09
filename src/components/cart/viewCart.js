@@ -1,10 +1,15 @@
 import { Button, Modal, notification, Tooltip } from "antd";
+import { useNavigate } from "react-router-dom";
 import { DeleteOutlined } from "@ant-design/icons";
 import React from "react";
 import { cartAPI } from "../../services/cartApi";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../slice/auth/auth.slices";
 
 function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
+  const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
+  const dispatch = useDispatch()
   const token = localStorage.getItem("token");
   const openNotification = (data) => {
     api.open({
@@ -21,8 +26,13 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
       };
       const res = await cartAPI("", token, "POST", payload);
       if (res) {
-        setCartList([...res]);
-        setCartCount(res?.length);
+        if(typeof res === 'string') {
+          openNotification({ message: res, type: 'error'})
+        } else {
+          dispatch(addToCart([...res]))
+          setCartList([...res]);
+          setCartCount(res?.length);
+        }
       }
     } catch (err) {
       const data = {
@@ -36,6 +46,7 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
     try {
       const res = await cartAPI(id, token, "DELETE", "");
       if (res) {
+        dispatch(addToCart([...res]))
         setCartList([...res]);
         setCartCount(res?.length);
       }
@@ -47,6 +58,9 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
       openNotification(data);
     }
   };
+  const handleCheckout = async () => {
+      navigate("/checkout");
+  }
   function truncateText(text, limit) {
     if (text.length <= limit) {
       return text;
@@ -67,6 +81,7 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
             <Button
               type="primary"
               key={cart?.id}
+              onClick={handleCheckout}
               style={{ bottom: "10px" }}
               block
             >

@@ -1,6 +1,8 @@
 import { Button, Modal, notification } from "antd";
-import React, { useState } from "react";
+import React from "react";
 import { cartAPI } from "../../services/cartApi";
+import { addToCart } from "../../slice/auth/auth.slices";
+import { useDispatch } from "react-redux";
 
 function ViewProduct({
   visible,
@@ -10,6 +12,7 @@ function ViewProduct({
   setCartList,
 }) {
   const [api, contextHolder] = notification.useNotification();
+  const dispatch = useDispatch()
   const openNotification = (data) => {
     api.open({
       type: data?.type,
@@ -26,6 +29,7 @@ function ViewProduct({
       };
       const res = await cartAPI("", token, "POST", payload);
       if (res) {
+        dispatch(addToCart([...res]))
         setCartList([...res]);
         setCartCount(res?.length);
       }
