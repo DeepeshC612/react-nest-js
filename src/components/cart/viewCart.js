@@ -76,6 +76,7 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
         title="Shopping Cart"
         open={visible}
         width={500}
+        footer={[]}
         onCancel={onCancel}
         style={{
           position: "fixed",
