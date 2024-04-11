@@ -76,7 +76,17 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
         title="Shopping Cart"
         open={visible}
         width={500}
-        footer={[]}
+        footer={[
+          <Button
+            type="primary"
+            key="checkout"
+            onClick={handleCheckout}
+            style={{ bottom: "10px" }}
+            block
+          >
+            Checkout: {SubTotal} ₹
+          </Button>
+        ]}
         onCancel={onCancel}
         style={{
           position: "fixed",
@@ -186,17 +196,6 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
               </div>
             </div>
           ))}
-        </div>
-        <div>
-          <Button
-            type="primary"
-            key={cart?.id}
-            onClick={handleCheckout}
-            style={{ bottom: "10px" }}
-            block
-          >
-            Checkout: {SubTotal} ₹
-          </Button>
         </div>
       </Modal>
     </>
