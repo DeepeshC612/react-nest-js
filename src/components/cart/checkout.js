@@ -88,7 +88,6 @@ export default function Checkout() {
     api.open({
       type: data?.type,
       message: data?.message,
-      duration: 1,
     });
   };
 

@@ -22,7 +22,6 @@ export default function Login() {
     api.open({
       type: data?.type,
       message: data?.message,
-      duration: 0,
     });
   };
 

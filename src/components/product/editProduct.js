@@ -32,7 +32,6 @@ function EditProduct({
     api.open({
       type: data?.type,
       message: data?.message,
-      duration: 0,
     });
   };
 

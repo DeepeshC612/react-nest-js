@@ -160,7 +160,6 @@ export default function Dashboard() {
     api.open({
       type: data?.type,
       message: data?.message,
-      duration: 0,
     });
   };
 
