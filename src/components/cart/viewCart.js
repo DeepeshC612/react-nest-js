@@ -1,11 +1,15 @@
 import { Button, Modal, notification, Tooltip } from "antd";
+import { useNavigate } from "react-router-dom";
 import { DeleteOutlined } from "@ant-design/icons";
 import React from "react";
 import { cartAPI } from "../../services/cartApi";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../slice/auth/auth.slices";
 
 function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
+  const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
+  const dispatch = useDispatch()
   const token = localStorage.getItem("token");
   const openNotification = (data) => {
     api.open({
@@ -24,6 +28,7 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
         if(typeof res === 'string') {
           openNotification({ message: res, type: 'error'})
         } else {
+          dispatch(addToCart([...res]))
           setCartList([...res]);
           setCartCount(res?.length);
         }
@@ -40,6 +45,7 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
     try {
       const res = await cartAPI(id, token, "DELETE", "");
       if (res) {
+        dispatch(addToCart([...res]))
         setCartList([...res]);
         setCartCount(res?.length);
       }
@@ -51,13 +57,15 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
       openNotification(data);
     }
   };
+  const handleCheckout = async () => {
+      navigate("/checkout");
+  }
   function truncateText(text, limit) {
     if (text.length <= limit) {
       return text;
     }
     return text.slice(0, limit) + "....";
   }
-  const cartData = useSelector((state) => state?.auth?.cartData)
   const SubTotal = cart.reduce((acc, index) => {
     return +acc + +index?.totalPrice;
   }, 0);
@@ -72,6 +80,7 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
             <Button
               type="primary"
               key={cart?.id}
+              onClick={handleCheckout}
               style={{ bottom: "10px" }}
               block
             >
