@@ -91,7 +91,7 @@ export default function Dashboard() {
           let cart = await cartAPI("", token, "GET", "");
           if (cart) {
             setCartList(cart);
-            dispatch(addToCart(cart))
+            dispatch(addToCart(cart));
             cart?.map((e) => {
               handleIsClicked(e?.productId);
               return e;
@@ -206,7 +206,7 @@ export default function Dashboard() {
       }
       if (res) {
         setCartList([...res]);
-        dispatch(addToCart([...res]))
+        dispatch(addToCart([...res]));
         setCartCount(res?.length);
       }
     } catch (err) {
@@ -250,22 +250,28 @@ export default function Dashboard() {
               background: "rgba(255, 255, 255, 0.2)",
             }}
           >
-            <div style={{display: 'flex', alignItems: 'center'}}>
-            <img
-              src={userData?.profilePic}
-              alt="profilePic"
-              style={{
-                borderRadius: "50%",
-                height: "40px",
-                width: "40px",
-                objectFit: "cover",
-                marginLeft: "3px",
-                marginRight: "5px",
-              }}
-            ></img>
-            <p style={{fontWeight: 'bold', marginTop: '12px', color: 'white'}}>
-            {userData?.name}
-            </p>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <img
+                src={userData?.profilePic}
+                alt="profilePic"
+                style={{
+                  borderRadius: "50%",
+                  height: "40px",
+                  width: "40px",
+                  objectFit: "cover",
+                  marginLeft: "3px",
+                  marginRight: "5px",
+                }}
+              ></img>
+              <p
+                style={{
+                  fontWeight: "bold",
+                  marginTop: "12px",
+                  color: "white",
+                }}
+              >
+                {userData?.name}
+              </p>
             </div>
           </div>
           <Menu
@@ -286,6 +292,8 @@ export default function Dashboard() {
             style={{
               padding: 0,
               background: "#fff",
+              color: "black",
+              boxShadow: "0 -8px 10px 5px rgba(0,0,0,0.5)",
             }}
           >
             <div style={{ position: "absolute", right: 140, marginTop: "2px" }}>
@@ -305,126 +313,147 @@ export default function Dashboard() {
               Add product
             </Button>
           </Header>
-          <Content
-            style={{
-              margin: "10px 16px 0",
-              overflow: "initial",
-            }}
-          >
-            <div
-              className="site-layout-background"
+          <Layout>
+            <Content
               style={{
-                padding: 20,
-                background: "rgba(255, 255, 255, 0.2)",
+                margin: "10px 16px 0",
+                overflow: "initial",
+                height: "100vh",
               }}
             >
-              {contextHolder}
               <div
-                className="spinner-container"
+                className="site-layout-background"
                 style={{
-                  position: "fixed",
-                  top: "0",
-                  left: "50%",
+                  padding: 20,
+                  background: "rgba(255, 255, 255, 0.2)",
+
                 }}
               >
-                {isLoading && <Spin indicator={antIcon} />}
-              </div>
-              <Row>
-                {products.map((e, index) => (
-                  <div key={index} style={{ marginTop: "15px" }}>
-                    <Col span={8}>
-                      <Card
-                        bordered={true}
-                        style={{
-                          width: 200,
-                          marginInline: "10px",
-                          height: 350,
-                        }}
-                        cover={
-                          <img
-                            alt={e.image}
-                            src={e.image}
-                            key={index}
-                            style={{ height: "200px", objectFit: "cover" }}
+                {contextHolder}
+                <div
+                  className="spinner-container"
+                  style={{
+                    position: "fixed",
+                    top: "0",
+                    left: "50%",
+                  }}
+                >
+                  {isLoading && <Spin indicator={antIcon} />}
+                </div>
+                <Row>
+                  {products.map((e, index) => (
+                    <div key={index} style={{ marginTop: "15px" }}>
+                      <Col span={8}>
+                        <Card
+                          bordered={false}
+                          style={{
+                            width: 200,
+                            marginInline: "10px",
+                            height: 350,
+                            boxShadow: "0 0px 5px 0px rgba(0,0,0,0.3)"
+                          }}
+                          cover={
+                            <img
+                              alt={e.image}
+                              src={e.image}
+                              key={index}
+                              style={{ height: "200px", objectFit: "cover" }}
+                            />
+                          }
+                          actions={[
+                            <Tooltip title="View product">
+                              <EyeOutlined
+                                key="view"
+                                style={{ fontSize: "18px" }}
+                                onClick={() => showViewProduct(true, e?.id)}
+                              />
+                            </Tooltip>,
+                            <Tooltip title="Edit product">
+                              <EditOutlined
+                                key="edit"
+                                style={{ fontSize: "18px" }}
+                                onClick={() => {
+                                  showEditProduct(true, e);
+                                }}
+                              />
+                            </Tooltip>,
+                            <div style={{ marginTop: "3px" }}>
+                              {checkBagClicked(e?.id) ? (
+                                <Tooltip title="Remove from Cart">
+                                  <ShoppingFilled
+                                    key="cartRemove"
+                                    style={{ fontSize: "20px" }}
+                                    onClick={() => handleIconClick(e?.id, "")}
+                                  />
+                                </Tooltip>
+                              ) : (
+                                <Tooltip title="Add to Cart">
+                                  <ShoppingOutlined
+                                    key="cartAdd"
+                                    style={{ fontSize: "20px" }}
+                                    onClick={() =>
+                                      handleIconClick(e?.id, "add")
+                                    }
+                                  />
+                                </Tooltip>
+                              )}
+                            </div>,
+                            <Tooltip title="Delete product">
+                              <DeleteOutlined
+                                key="deleted"
+                                style={{ fontSize: "18px" }}
+                                onClick={() => showDeleteProduct(true, e?.id)}
+                              />
+                            </Tooltip>,
+                          ]}
+                        >
+                          <Meta
+                            avatar={
+                              <Avatar
+                                style={{
+                                  fontSize: "12px",
+                                  fontWeight: "bold",
+                                  marginTop: "5px",
+                                  backgroundColor: "gray",
+                                }}
+                              >
+                                {e.price}₹
+                              </Avatar>
+                            }
+                            title={e.productName}
+                            description={
+                              <div
+                                style={{
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                }}
+                              >
+                                {truncateText(e.description, 15)}
+                              </div>
+                            }
                           />
-                        }
-                        actions={[
-                          <Tooltip title="View product">
-                            <EyeOutlined
-                              key="view"
-                              style={{ fontSize: "18px" }}
-                              onClick={() => showViewProduct(true, e?.id)}
-                            />
-                          </Tooltip>,
-                          <Tooltip title="Edit product">
-                            <EditOutlined
-                              key="edit"
-                              style={{ fontSize: "18px" }}
-                              onClick={() => {
-                                showEditProduct(true, e);
-                              }}
-                            />
-                          </Tooltip>,
-                          <div style={{ marginTop: "3px" }}>
-                            {checkBagClicked(e?.id) ? (
-                              <Tooltip title="Remove from Cart">
-                                <ShoppingFilled
-                                  key="cartRemove"
-                                  style={{ fontSize: "20px" }}
-                                  onClick={() => handleIconClick(e?.id, "")}
-                                />
-                              </Tooltip>
-                            ) : (
-                              <Tooltip title="Add to Cart">
-                                <ShoppingOutlined
-                                  key="cartAdd"
-                                  style={{ fontSize: "20px" }}
-                                  onClick={() => handleIconClick(e?.id, "add")}
-                                />
-                              </Tooltip>
-                            )}
-                          </div>,
-                          <Tooltip title="Delete product">
-                            <DeleteOutlined
-                              key="deleted"
-                              style={{ fontSize: "18px" }}
-                              onClick={() => showDeleteProduct(true, e?.id)}
-                            />
-                          </Tooltip>,
-                        ]}
-                      >
-                        <Meta
-                          avatar={
-                            <Avatar
-                              style={{
-                                fontSize: "12px",
-                                fontWeight: "bold",
-                                marginTop: "5px",
-                                backgroundColor: "gray",
-                              }}
-                            >
-                              {e.price}₹
-                            </Avatar>
-                          }
-                          title={e.productName}
-                          description={
-                            <div
-                              style={{
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                              }}
-                            >
-                              {truncateText(e.description, 15)}
-                            </div>
-                          }
-                        />
-                      </Card>
-                    </Col>
-                  </div>
-                ))}
-              </Row>
-            </div>
-          </Content>
+                        </Card>
+                      </Col>
+                    </div>
+                  ))}
+                </Row>
+              </div>
+            </Content>
+
+            <Sider
+              width="25%"
+              style={{
+                height: "100vh",
+                background: "#fff",
+                display: viewCartModal ? "block" : "none",
+                boxShadow: "0px 3px 2px 0px rgba(0,0,0,0.5)",
+              }}
+            >
+              <Button onClick={() => showCart(false)}>
+              sider
+              </Button>
+            </Sider>
+          </Layout>
           <AddProduct
             visible={addProductModal}
             onCancel={() => showAddProduct(false)}
@@ -452,13 +481,13 @@ export default function Dashboard() {
             product={products}
             setProduct={setProducts}
           />
-          <ViewCart
+          {/* <ViewCart
             visible={viewCartModal}
             onCancel={() => showCart(false)}
             cart={catList}
             setCartList={setCartList}
             setCartCount={setCartCount}
-          />
+          /> */}
         </Layout>
       </Layout>
     </div>
