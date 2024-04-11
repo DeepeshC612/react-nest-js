@@ -368,7 +368,7 @@ export default function Dashboard() {
                             {checkBagClicked(e?.id) ? (
                               <Tooltip title="Remove from Cart">
                                 <ShoppingFilled
-                                  key="cartAdd"
+                                  key="cartRemove"
                                   style={{ fontSize: "20px" }}
                                   onClick={() => handleIconClick(e?.id, "")}
                                 />
