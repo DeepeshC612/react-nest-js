@@ -72,7 +72,7 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
   return (
     <>
       {contextHolder}
-      <Modal
+      {/* <Modal
         title="Shopping Cart"
         open={visible}
         width={500}
@@ -96,7 +96,7 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
           right: 0,
           bottom: 0,
         }}
-      >
+      > */}
         {cart?.length === 0 && (
           <div
             style={{
@@ -133,6 +133,7 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
                     width: "100%",
                     objectFit: "cover",
                     borderRadius: "8px",
+                    margin: "10px",
                   }}
                 ></img>
               </div>
@@ -142,26 +143,28 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
                     fontWeight: "bold",
                     marginBottom: "5px",
                     marginTop: "10px",
+                    marginLeft: "10px",
                   }}
                 >
                   {cart.productName}
                 </p>
-                <p style={{ color: "gray", marginBottom: "5px" }}>
+                <p style={{ color: "gray", marginBottom: "5px", marginLeft: "10px", }}>
                   {truncateText(cart.description, 30)}
                 </p>
-                <p style={{ color: "gray", marginBottom: "5px" }}>
+                <p style={{ color: "gray", marginBottom: "5px", marginLeft: "10px", }}>
                   quantity: {cart.quantity}
                 </p>
                 <p
                   style={{
                     fontWeight: "bold",
                     position: "relative",
-                    marginLeft: "250px",
+                    marginLeft: "220px",
+                    top: 10,
                   }}
                 >
                   {cart.totalPrice}₹
                 </p>
-                <div style={{ position: "relative", marginTop: "-30px" }}>
+                <div style={{ position: "relative", marginTop: "-30px", marginLeft: "10px", }}>
                   <Tooltip title="Add quantity" placement="bottom">
                     <Button
                       size="middle"
@@ -197,7 +200,7 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
             </div>
           ))}
         </div>
-      </Modal>
+      {/* </Modal> */}
     </>
   );
 }
