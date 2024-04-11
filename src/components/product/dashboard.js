@@ -140,6 +140,7 @@ export default function Dashboard() {
 
   const showCart = async (data) => {
     setViewCartModal(data);
+    document.body.style.overflowX = "hidden";
   };
 
   const showEditProduct = async (data, e) => {
@@ -292,8 +293,6 @@ export default function Dashboard() {
             style={{
               padding: 0,
               background: "#fff",
-              color: "black",
-              boxShadow: "0 -8px 10px 5px rgba(0,0,0,0.5)",
             }}
           >
             <div style={{ position: "absolute", right: 140, marginTop: "2px" }}>
@@ -301,7 +300,9 @@ export default function Dashboard() {
                 <ShoppingCartOutlined
                   key="cart"
                   style={{ fontSize: "28px" }}
-                  onClick={() => showCart(true)}
+                  onClick={() =>
+                    viewCartModal ? showCart(false) : showCart(true)
+                  }
                 />
               </Badge>
             </div>
@@ -313,8 +314,9 @@ export default function Dashboard() {
               Add product
             </Button>
           </Header>
-          <Layout>
+          <Layout >
             <Content
+            onClick={() => showCart(false)}
               style={{
                 margin: "10px 16px 0",
                 overflow: "initial",
@@ -326,7 +328,6 @@ export default function Dashboard() {
                 style={{
                   padding: 20,
                   background: "rgba(255, 255, 255, 0.2)",
-
                 }}
               >
                 {contextHolder}
@@ -350,7 +351,7 @@ export default function Dashboard() {
                             width: 200,
                             marginInline: "10px",
                             height: 350,
-                            boxShadow: "0 0px 5px 0px rgba(0,0,0,0.3)"
+                            boxShadow: "0 0px 5px 0px rgba(0,0,0,0.3)",
                           }}
                           cover={
                             <img
@@ -441,17 +442,22 @@ export default function Dashboard() {
             </Content>
 
             <Sider
-              width="25%"
+              width="30%"
               style={{
                 height: "100vh",
                 background: "#fff",
-                display: viewCartModal ? "block" : "none",
-                boxShadow: "0px 3px 2px 0px rgba(0,0,0,0.5)",
+                boxShadow: "0px 3px 5px 0px rgba(0,0,0,0.4)",
+                right: viewCartModal ? 0 : "-400px",
+                transition: "right 0.5s ease",
               }}
             >
-              <Button onClick={() => showCart(false)}>
-              sider
-              </Button>
+              <ViewCart
+            visible={viewCartModal}
+            onCancel={() => showCart(false)}
+            cart={catList}
+            setCartList={setCartList}
+            setCartCount={setCartCount}
+          />
             </Sider>
           </Layout>
           <AddProduct
