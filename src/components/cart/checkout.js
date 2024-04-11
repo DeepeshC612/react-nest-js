@@ -184,12 +184,12 @@ export default function Checkout() {
         setTimeout(() => {
           navigate("/");
         }, 2000);
-        // dispatch(orderProduct([]));
-        // setSubTotal(0);
-        // products.map(async(item) => {
-        //   await cartAPI(item?.id, token, "DELETE", "");
-        // })
-        // dispatch(addToCart([]));
+        dispatch(orderProduct([]));
+        setSubTotal(0);
+        cartData?.map(async(item) => {
+          await cartAPI(item?.productId, token, "DELETE", "");
+        })
+        dispatch(addToCart([]));
         SetIsLoading(false);
       }
     } catch (err) {
