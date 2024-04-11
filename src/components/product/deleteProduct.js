@@ -9,7 +9,6 @@ function DeleteProduct({ visible, onCancel, id, product, setProduct }) {
     api.open({
       type: data?.type,
       message: data?.message,
-      duration: 0,
     });
   };
 

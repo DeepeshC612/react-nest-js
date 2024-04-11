@@ -11,7 +11,6 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
     api.open({
       type: data?.type,
       message: data?.message,
-      duration: 0,
     });
   };
   const handleCart = async (id, value) => {

@@ -21,7 +21,6 @@ export default function EmailVerification() {
     api.open({
       type: data?.type,
       message: data?.message,
-      duration: 0,
     });
   };
 

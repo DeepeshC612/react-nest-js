@@ -17,7 +17,6 @@ function ViewProduct({
     api.open({
       type: data?.type,
       message: data?.message,
-      duration: 0,
     });
   };
   const handleCartCount = async () => {
