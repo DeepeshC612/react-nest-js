@@ -4,7 +4,8 @@ export const counterSlice = createSlice({
   name: "auth",
   initialState: {
     userData: {},
-    cartData: []
+    cart: [],
+    order: []
   },
   reducers: {
     loginAction: (state, action) => {
@@ -16,13 +17,19 @@ export const counterSlice = createSlice({
     cartAction: (state, action) => {
       return (state = {
         ...state,
-        cartData: action.payload,
+        cart: action.payload,
+      });
+    },
+    orderAction: (state, action) => {
+      return (state = {
+        ...state,
+        order: action.payload,
       });
     },
   },
 });
 
-export const { loginAction, cartAction } = counterSlice.actions;
+export const { loginAction, cartAction, orderAction } = counterSlice.actions;
 
 export const login = (data) => async (dispatch) => {
   try {
@@ -31,9 +38,16 @@ export const login = (data) => async (dispatch) => {
     console.log(error)
   }
 };
-export const cartListAdd = (data) => async (dispatch) => {
+export const addToCart = (data) => async (dispatch) => {
   try {
     dispatch(cartAction(data));
+  } catch (error) {
+    console.log(error)
+  }
+};
+export const orderProduct = (data) => async (dispatch) => {
+  try {
+    dispatch(orderAction(data));
   } catch (error) {
     console.log(error)
   }
