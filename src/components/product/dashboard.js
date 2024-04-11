@@ -33,7 +33,8 @@ import {
 } from "antd";
 import EditProduct from "./editProduct";
 import { cartAPI } from "../../services/cartApi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../../slice/auth/auth.slices";
 
 const { Header, Content, Sider } = Layout;
 const { Meta } = Card;
@@ -49,6 +50,7 @@ export default function Dashboard() {
   const [viewProductModal, setViewProductModal] = useState(false);
   const [editProductModal, setEditProductModal] = useState(false);
   const [deleteProductModal, setDeleteProductModal] = useState(false);
+  const dispatch = useDispatch();
   const token = localStorage.getItem("token");
   const userData = useSelector((state) => state?.auth?.userData);
   const navigate = useNavigate();
@@ -89,6 +91,7 @@ export default function Dashboard() {
           let cart = await cartAPI("", token, "GET", "");
           if (cart) {
             setCartList(cart);
+            dispatch(addToCart(cart))
             cart?.map((e) => {
               handleIsClicked(e?.productId);
               return e;
@@ -202,14 +205,12 @@ export default function Dashboard() {
         handleIsClicked(id, false);
       }
       if (res) {
-        if(typeof res === 'string') {
-          openNotification({ message: res, type: 'error'})
-        } else {
-          setCartList([...res]);
-          setCartCount(res?.length);
-        }
+        setCartList([...res]);
+        dispatch(addToCart([...res]))
+        setCartCount(res?.length);
       }
     } catch (err) {
+      console.log(err);
       const data = {
         message: err?.response?.data?.error ?? err?.response?.data?.message,
         type: "error",
