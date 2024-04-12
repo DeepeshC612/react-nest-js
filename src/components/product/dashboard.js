@@ -467,8 +467,6 @@ export default function Dashboard() {
                 background: "#fff",
                 boxShadow: "0px 3px 5px 0px rgba(0,0,0,0.4)",
                 overflowX: 'hidden'
-               // opacity: viewCartModal ? 1 : 0,
-                //transition: "opacity 0.2s ease-in-out"
               }}
             >
               <ViewCart
