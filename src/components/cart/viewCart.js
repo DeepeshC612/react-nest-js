@@ -72,7 +72,7 @@ function ViewCart({ cart, setCartList, setCartCount }) {
   return (
     <>
       {contextHolder}
-        {cart?.length === 0 && (
+        {cart?.length === 0 ? (
           <div
             style={{
               position: "absolute",
@@ -83,21 +83,21 @@ function ViewCart({ cart, setCartList, setCartCount }) {
           >
             Cart is empty...
           </div>
-        )}
+        ):
         <div style={{ overflowY: "auto", height: "calc(100vh - 100px)" }}>
           {cart.map((cart, index) => (
             <div
               key={index}
               style={{
-                marginBottom: "20px",
                 display: "flex",
                 alignItems: "center",
+                marginBottom: "15px",
+                paddingBottom: "15px",
                 borderBottom: "1px solid #e8e8e8",
-                paddingBottom: "20px",
               }}
             >
               <div
-                style={{ height: "120px", width: "120px", marginRight: "10px" }}
+                style={{ height: "100px", width: "100px", marginRight: "10px" }}
               >
                 <img
                   src={cart.productImage}
@@ -107,8 +107,8 @@ function ViewCart({ cart, setCartList, setCartCount }) {
                     height: "100%",
                     width: "100%",
                     objectFit: "cover",
-                    borderRadius: "8px",
-                    marginLeft: "10px",
+                    borderRadius: "50px",
+                    marginLeft: "15px",
                     marginTop: "5px",
                   }}
                 ></img>
@@ -117,17 +117,17 @@ function ViewCart({ cart, setCartList, setCartCount }) {
                 <p
                   style={{
                     fontWeight: "bold",
-                    marginBottom: "5px",
+                    marginBottom: "2px",
                     marginTop: "10px",
-                    marginLeft: "10px",
+                    marginLeft: "15px",
                   }}
                 >
                   {cart.productName}
                 </p>
-                <p style={{ color: "gray", marginBottom: "5px", marginLeft: "10px", }}>
+                <p style={{ color: "gray", marginBottom: "5px", marginLeft: "15px", }}>
                   {truncateText(cart.description, 30)}
                 </p>
-                <p style={{ color: "gray", marginBottom: "5px", marginLeft: "10px", }}>
+                <p style={{ color: "gray", marginBottom: "5px", marginLeft: "15px", }}>
                   quantity: {cart.quantity}
                 </p>
                 <p
@@ -140,7 +140,7 @@ function ViewCart({ cart, setCartList, setCartCount }) {
                 >
                   {cart.totalPrice}₹
                 </p>
-                <div style={{ position: "relative", marginTop: "-30px", marginLeft: "10px", }}>
+                <div style={{ position: "relative", marginTop: "-30px", marginLeft: "15px", }}>
                   <Tooltip title="Add quantity" placement="bottom">
                     <Button
                       size="middle"
@@ -181,13 +181,14 @@ function ViewCart({ cart, setCartList, setCartCount }) {
             key="checkout"
             onClick={handleCheckout}
             size="large"
-            style={{ bottom: 10, marginLeft: '10px', width: "95%",  }}
+            style={{ bottom: 10, marginLeft: '10px', width: "95%", marginTop: "10px" }}
             
           >
             Checkout: {SubTotal} ₹
           </Button>
           </div>
         </div>
+        }
     </>
   );
 }
