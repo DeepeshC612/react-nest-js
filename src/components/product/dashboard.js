@@ -460,11 +460,14 @@ export default function Dashboard() {
 
             <Sider
               width="30%"
+              collapsible
+              collapsed={viewCartModal}
+              collapsedWidth={0}
               style={{
                 height: "105vh",
                 background: "#fff",
                 boxShadow: "0px 3px 5px 0px rgba(0,0,0,0.4)",
-                display: viewCartModal ? "block" : "none",
+                overflowX: 'hidden'
               }}
             >
               <ViewCart
@@ -473,6 +476,8 @@ export default function Dashboard() {
                 setCartCount={setCartCount}
               />
             </Sider>
+          
+
           </Layout>
           <AddProduct
             visible={addProductModal}
