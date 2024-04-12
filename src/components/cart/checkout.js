@@ -578,7 +578,7 @@ export default function Checkout() {
                     </div>
                   ))
                 : null}
-                <Button type="primary" onClick={handleContinueShop} style={{position: 'relative', top: 10}} block>
+                <Button type="primary" size="large" onClick={handleContinueShop} style={{position: 'relative', top: 10}} block>
                   Continue shopping
                 </Button>
             </div>

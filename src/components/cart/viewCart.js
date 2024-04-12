@@ -6,7 +6,7 @@ import { cartAPI } from "../../services/cartApi";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../slice/auth/auth.slices";
 
-function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
+function ViewCart({ cart, setCartList, setCartCount }) {
   const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
   const dispatch = useDispatch();
@@ -72,31 +72,6 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
   return (
     <>
       {contextHolder}
-      {/* <Modal
-        title="Shopping Cart"
-        open={visible}
-        width={500}
-        footer={[
-          <Button
-            type="primary"
-            key="checkout"
-            onClick={handleCheckout}
-            style={{ bottom: "10px" }}
-            block
-          >
-            Checkout: {SubTotal} ₹
-          </Button>
-        ]}
-        onCancel={onCancel}
-        style={{
-          position: "fixed",
-          overflow: "hidden",
-          height: "100vh",
-          top: 0,
-          right: 0,
-          bottom: 0,
-        }}
-      > */}
         {cart?.length === 0 && (
           <div
             style={{
@@ -133,7 +108,8 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
                     width: "100%",
                     objectFit: "cover",
                     borderRadius: "8px",
-                    margin: "10px",
+                    marginLeft: "10px",
+                    marginTop: "5px",
                   }}
                 ></img>
               </div>
@@ -199,8 +175,19 @@ function ViewCart({ visible, onCancel, cart, setCartList, setCartCount }) {
               </div>
             </div>
           ))}
+          <div>
+          <Button
+            type="primary"
+            key="checkout"
+            onClick={handleCheckout}
+            size="large"
+            style={{ bottom: 10, marginLeft: '10px', width: "95%",  }}
+            
+          >
+            Checkout: {SubTotal} ₹
+          </Button>
+          </div>
         </div>
-      {/* </Modal> */}
     </>
   );
 }

@@ -140,7 +140,6 @@ export default function Dashboard() {
 
   const showCart = async (data) => {
     setViewCartModal(data);
-    document.body.style.overflowX = "hidden";
   };
 
   const showEditProduct = async (data, e) => {
@@ -226,6 +225,23 @@ export default function Dashboard() {
     }
     return text.slice(0, limit) + "....";
   }
+
+  const viewCartAnimationStyles = {
+    "view-cart-animation-enter": {
+      opacity: 0,
+    },
+    "view-cart-animation-enter-active": {
+      opacity: 1,
+      transition: "opacity 500ms",
+    },
+    "view-cart-animation-exit": {
+      opacity: 1,
+    },
+    "view-cart-animation-exit-active": {
+      opacity: 0,
+      transition: "opacity 500ms",
+    },
+  };
   return (
     <div>
       <Layout hasSider>
@@ -314,9 +330,9 @@ export default function Dashboard() {
               Add product
             </Button>
           </Header>
-          <Layout >
+          <Layout>
             <Content
-            onClick={() => showCart(false)}
+              onClick={() => showCart(false)}
               style={{
                 margin: "10px 16px 0",
                 overflow: "initial",
@@ -341,10 +357,10 @@ export default function Dashboard() {
                 >
                   {isLoading && <Spin indicator={antIcon} />}
                 </div>
-                <Row>
+                <Row gutter={[16, 16]}>
                   {products.map((e, index) => (
                     <div key={index} style={{ marginTop: "15px" }}>
-                      <Col span={8}>
+                      <Col key={index} xs={24} sm={12} md={8} lg={6} xl={6}>
                         <Card
                           bordered={false}
                           style={{
@@ -444,20 +460,17 @@ export default function Dashboard() {
             <Sider
               width="30%"
               style={{
-                height: "100vh",
+                height: "105vh",
                 background: "#fff",
                 boxShadow: "0px 3px 5px 0px rgba(0,0,0,0.4)",
-                right: viewCartModal ? 0 : "-400px",
-                transition: "right 0.5s ease",
+                display: viewCartModal ? "block" : "none",
               }}
             >
               <ViewCart
-            visible={viewCartModal}
-            onCancel={() => showCart(false)}
-            cart={catList}
-            setCartList={setCartList}
-            setCartCount={setCartCount}
-          />
+                cart={catList}
+                setCartList={setCartList}
+                setCartCount={setCartCount}
+              />
             </Sider>
           </Layout>
           <AddProduct
@@ -487,13 +500,6 @@ export default function Dashboard() {
             product={products}
             setProduct={setProducts}
           />
-          {/* <ViewCart
-            visible={viewCartModal}
-            onCancel={() => showCart(false)}
-            cart={catList}
-            setCartList={setCartList}
-            setCartCount={setCartCount}
-          /> */}
         </Layout>
       </Layout>
     </div>
