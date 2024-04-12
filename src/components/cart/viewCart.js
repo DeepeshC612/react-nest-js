@@ -181,7 +181,7 @@ function ViewCart({ cart, setCartList, setCartCount }) {
             key="checkout"
             onClick={handleCheckout}
             size="large"
-            style={{ bottom: 10, marginLeft: '10px', width: "95%", marginTop: "10px" }}
+            style={{ bottom: 10, marginLeft: '18px', width: "90%", marginTop: "10px" }}
             
           >
             Checkout: {SubTotal} ₹
