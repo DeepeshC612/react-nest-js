@@ -8,12 +8,7 @@ import axios from "axios";
 function AddProduct({ visible, onCancel, product, setProduct }) {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [api, contextHolder] = notification.useNotification();
-  const [formData, setFormData] = useState({
-    productName: "",
-    price: "",
-    description: "",
-    quantity: "",
-  });
+  const [formData, setFormData] = useState({});
 
   const openNotification = (data) => {
     api.open({
@@ -31,9 +26,9 @@ function AddProduct({ visible, onCancel, product, setProduct }) {
     }
   };
 
-  async function handleOk (e) {
+  async function handleOk(e) {
     setConfirmLoading(true);
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem("token");
     e.preventDefault();
     try {
       const res = await axios.post(
@@ -42,27 +37,37 @@ function AddProduct({ visible, onCancel, product, setProduct }) {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
         }
       );
       const { status, message, data } = res?.data;
       if (status) {
-        setProduct([...product, data])
+        setProduct([...product, data]);
         openNotification({ message: message, type: "success" });
+        setFormData({
+          productName: "",
+          price: "",
+          description: "",
+          quantity: "",
+        });
+        document.getElementById('formFile').value = '';
         setTimeout(() => {
           onCancel();
           setConfirmLoading(false);
         }, 1000);
       }
     } catch (err) {
-      const data = { message: err?.response?.data?.error ?? err?.response?.data?.message, type: "error" };
+      const data = {
+        message: err?.response?.data?.error ?? err?.response?.data?.message,
+        type: "error",
+      };
       openNotification(data);
     }
-  };
+  }
   return (
     <>
-    {contextHolder}
+      {contextHolder}
       <Modal
         title="Add new product"
         open={visible}

@@ -51,7 +51,7 @@ function DeleteProduct({ visible, onCancel, id, product, setProduct }) {
               style={{ marginRight: "5px" }}
               onClick={() => handleOk(id)}
             >
-              Ok
+              Are you sure?
             </Button>
             <Button type="primary" key={product[0]?.productName} onClick={onCancel}>
               Cancel
