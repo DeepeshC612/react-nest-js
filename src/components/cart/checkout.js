@@ -83,7 +83,6 @@ export default function Checkout() {
     fetchData();
   }, []);
 
-
   const openNotification = (data) => {
     api.open({
       type: data?.type,
@@ -150,13 +149,18 @@ export default function Checkout() {
         message: err?.response?.data?.error ?? err?.response?.data?.message,
         type: "error",
       };
+      if (data.message === "Unauthorized") {
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      }
       openNotification(data);
     }
   };
 
   const handlePlaceOrder = async () => {
     try {
-      await form.validateFields()
+      await form.validateFields();
       const product = [];
       cartData?.map((item) => {
         const obj = {
@@ -180,15 +184,15 @@ export default function Checkout() {
       );
       const { status, message } = res?.data;
       if (status) {
-        openNotification({message: message, type: 'success'})
+        openNotification({ message: message, type: "success" });
         setTimeout(() => {
           navigate("/");
         }, 2000);
         dispatch(orderProduct([]));
         setSubTotal(0);
-        cartData?.map(async(item) => {
+        cartData?.map(async (item) => {
           await cartAPI(item?.productId, token, "DELETE", "");
-        })
+        });
         dispatch(addToCart([]));
         SetIsLoading(false);
       }
@@ -204,10 +208,10 @@ export default function Checkout() {
       }
       openNotification(data);
     }
-  }
+  };
   const handleContinueShop = async () => {
-    navigate('/')
-  }
+    navigate("/");
+  };
   return (
     <div>
       <Layout>
@@ -546,7 +550,15 @@ export default function Checkout() {
                           <Tooltip title="Add quantity" placement="bottom">
                             <Button
                               size="middle"
-                              onClick={() => handleCart(cart?.cartQuantity ? cart?.id : cart?.productId, 1, "POST")}
+                              onClick={() =>
+                                handleCart(
+                                  cart?.cartQuantity
+                                    ? cart?.id
+                                    : cart?.productId,
+                                  1,
+                                  "POST"
+                                )
+                              }
                             >
                               +
                             </Button>
@@ -558,7 +570,15 @@ export default function Checkout() {
                                 paddingLeft: "17px",
                                 paddingRight: "17px",
                               }}
-                              onClick={() => handleCart(cart?.cartQuantity ? cart?.id : cart?.productId, -1, "POST")}
+                              onClick={() =>
+                                handleCart(
+                                  cart?.cartQuantity
+                                    ? cart?.id
+                                    : cart?.productId,
+                                  -1,
+                                  "POST"
+                                )
+                              }
                             >
                               -
                             </Button>
@@ -570,7 +590,15 @@ export default function Checkout() {
                                 fontSize: "20px",
                                 color: "red",
                               }}
-                              onClick={() => handleCart(cart?.cartQuantity ? cart?.id : cart?.productId, 0, "DELETE")}
+                              onClick={() =>
+                                handleCart(
+                                  cart?.cartQuantity
+                                    ? cart?.id
+                                    : cart?.productId,
+                                  0,
+                                  "DELETE"
+                                )
+                              }
                             />
                           </Tooltip>
                         </div>
@@ -578,9 +606,15 @@ export default function Checkout() {
                     </div>
                   ))
                 : null}
-                <Button type="primary" size="large" onClick={handleContinueShop} style={{position: 'relative', top: 10}} block>
-                  Continue shopping
-                </Button>
+              <Button
+                type="primary"
+                size="large"
+                onClick={handleContinueShop}
+                style={{ position: "relative", top: 10 }}
+                block
+              >
+                Continue shopping
+              </Button>
             </div>
           </Content>
         </Layout>

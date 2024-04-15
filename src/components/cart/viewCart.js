@@ -38,6 +38,11 @@ function ViewCart({ cart, setCartList, setCartCount }) {
         message: err?.response?.data?.error ?? err?.response?.data?.message,
         type: "error",
       };
+      if (data.message === "Unauthorized") {
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      }
       openNotification(data);
     }
   };
@@ -54,6 +59,11 @@ function ViewCart({ cart, setCartList, setCartCount }) {
         message: err?.response?.data?.error ?? err?.response?.data?.message,
         type: "error",
       };
+      if (data.message === "Unauthorized") {
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      }
       openNotification(data);
     }
   };

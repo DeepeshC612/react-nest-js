@@ -3,6 +3,7 @@ import React from "react";
 import { cartAPI } from "../../services/cartApi";
 import { addToCart } from "../../slice/auth/auth.slices";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function ViewProduct({
   visible,
@@ -12,6 +13,7 @@ function ViewProduct({
   setCartList,
 }) {
   const [api, contextHolder] = notification.useNotification();
+  const navigate = useNavigate();
   const dispatch = useDispatch()
   const openNotification = (data) => {
     api.open({
@@ -37,6 +39,11 @@ function ViewProduct({
         message: err?.response?.data?.error ?? err?.response?.data?.message,
         type: "error",
       };
+      if (data.message === "Unauthorized") {
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      }
       openNotification(data);
     }
   };

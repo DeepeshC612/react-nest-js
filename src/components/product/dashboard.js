@@ -133,6 +133,11 @@ export default function Dashboard() {
         message: err?.response?.data?.error ?? err?.response?.data?.message,
         type: "error",
       };
+      if (data.message === "Unauthorized") {
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      }
       openNotification(data);
     }
     setViewProductModal(data);
@@ -211,11 +216,15 @@ export default function Dashboard() {
         setCartCount(res?.length);
       }
     } catch (err) {
-      console.log(err);
       const data = {
         message: err?.response?.data?.error ?? err?.response?.data?.message,
         type: "error",
       };
+      if (data.message === "Unauthorized") {
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      }
       openNotification(data);
     }
   };
@@ -227,22 +236,6 @@ export default function Dashboard() {
     return text.slice(0, limit) + "....";
   }
 
-  const viewCartAnimationStyles = {
-    "view-cart-animation-enter": {
-      opacity: 0,
-    },
-    "view-cart-animation-enter-active": {
-      opacity: 1,
-      transition: "opacity 500ms",
-    },
-    "view-cart-animation-exit": {
-      opacity: 1,
-    },
-    "view-cart-animation-exit-active": {
-      opacity: 0,
-      transition: "opacity 500ms",
-    },
-  };
   return (
     <div>
       <Layout hasSider>
