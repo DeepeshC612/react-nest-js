@@ -17,6 +17,7 @@ import {
   ShoppingCartOutlined,
   ShoppingOutlined,
   ShoppingFilled,
+  UserOutlined,
 } from "@ant-design/icons";
 import {
   notification,
@@ -66,12 +67,19 @@ export default function Dashboard() {
   const handelProduct = () => {
     navigate("/");
   };
-  const sideBarItems = [DropboxOutlined, LogoutOutlined].map((icon, index) => ({
-    key: String(index + 1),
-    icon: React.createElement(icon),
-    label: index === 0 ? "Product" : "Logout",
-    onClick: index === 1 ? handleLogout : handelProduct,
-  }));
+  let sideBar = [
+    { icon: DropboxOutlined, label: "Product", onClick: handelProduct },
+    { icon: UserOutlined, label: "My order" },
+    { icon: LogoutOutlined, label: "Logout", onClick: handleLogout },
+  ];
+  const sideBarItems = sideBar.map(
+    (item, index) => ({
+      key: String(index + 1),
+      icon: React.createElement(item.icon),
+      label: item.label,
+      onClick: item?.onClick,
+    })
+  );
 
   useEffect(() => {
     SetIsLoading(true);
@@ -460,7 +468,7 @@ export default function Dashboard() {
                 height: "105vh",
                 background: "#fff",
                 boxShadow: "0px 3px 5px 0px rgba(0,0,0,0.4)",
-                overflowX: 'hidden'
+                overflowX: "hidden",
               }}
             >
               <ViewCart
@@ -469,8 +477,6 @@ export default function Dashboard() {
                 setCartCount={setCartCount}
               />
             </Sider>
-          
-
           </Layout>
           <AddProduct
             visible={addProductModal}
