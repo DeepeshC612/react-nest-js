@@ -140,6 +140,7 @@ export default function Dashboard() {
 
   const showCart = async (data) => {
     setViewCartModal(data);
+    document.body.style.overflowX = "hidden";
   };
 
   const showEditProduct = async (data, e) => {
@@ -460,7 +461,7 @@ export default function Dashboard() {
             <Sider
               width="30%"
               collapsible
-              collapsed={viewCartModal}
+              collapsed={!viewCartModal}
               collapsedWidth={0}
               style={{
                 height: "105vh",
