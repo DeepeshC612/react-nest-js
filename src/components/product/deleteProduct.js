@@ -1,10 +1,11 @@
 import { Button, Modal, notification } from "antd";
 import React from "react";
 import { productAPI } from "../../services/productApi";
+import { useNavigate } from "react-router-dom";
 
 function DeleteProduct({ visible, onCancel, id, product, setProduct }) {
   const [api, contextHolder] = notification.useNotification();
-
+  const navigate = useNavigate();
   const openNotification = (data) => {
     api.open({
       type: data?.type,
@@ -27,6 +28,11 @@ function DeleteProduct({ visible, onCancel, id, product, setProduct }) {
         message: err?.response?.data?.error ?? err?.response?.data?.message,
         type: "error",
       };
+      if (data.message === "Unauthorized") {
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      }
       openNotification(data);
     }
   };

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import { notification } from "antd";
 import { productAPI } from "../../services/productApi";
+import { useNavigate } from "react-router-dom";
 
 function EditProduct({
   visible,
@@ -13,6 +14,7 @@ function EditProduct({
 }) {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [api, contextHolder] = notification.useNotification();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     productName: "",
     price: "",
@@ -65,6 +67,11 @@ function EditProduct({
         message: err?.response?.data?.error ?? err?.response?.data?.message,
         type: "error",
       };
+      if (data.message === "Unauthorized") {
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      }
       openNotification(data);
     }
   }
