@@ -461,7 +461,7 @@ export default function Dashboard() {
             <Sider
               width="30%"
               collapsible
-              collapsed={viewCartModal}
+              collapsed={!viewCartModal}
               collapsedWidth={0}
               style={{
                 height: "105vh",
