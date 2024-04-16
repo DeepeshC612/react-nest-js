@@ -9,21 +9,17 @@ import ViewProduct from "./viewProduct";
 import ViewCart from "../cart/viewCart";
 import {
   LoadingOutlined,
-  DropboxOutlined,
-  LogoutOutlined,
   EyeOutlined,
   DeleteOutlined,
   EditOutlined,
   ShoppingCartOutlined,
   ShoppingOutlined,
   ShoppingFilled,
-  UserOutlined,
 } from "@ant-design/icons";
 import {
   notification,
   Spin,
   Layout,
-  Menu,
   Card,
   Col,
   Row,
@@ -34,8 +30,9 @@ import {
 } from "antd";
 import EditProduct from "./editProduct";
 import { cartAPI } from "../../services/cartApi";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addToCart } from "../../slice/auth/auth.slices";
+import SideBar from "../common/sideBar";
 
 const { Header, Content, Sider } = Layout;
 const { Meta } = Card;
@@ -53,33 +50,8 @@ export default function Dashboard() {
   const [deleteProductModal, setDeleteProductModal] = useState(false);
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
-  const userData = useSelector((state) => state?.auth?.userData);
   const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
-
-  const handleLogout = () => {
-    localStorage.clear();
-    openNotification({ message: "Logout", type: "success" });
-    setTimeout(() => {
-      navigate("/login");
-    }, 500);
-  };
-  const handelProduct = () => {
-    navigate("/");
-  };
-  let sideBar = [
-    { icon: DropboxOutlined, label: "Product", onClick: handelProduct },
-    { icon: UserOutlined, label: "My order" },
-    { icon: LogoutOutlined, label: "Logout", onClick: handleLogout },
-  ];
-  const sideBarItems = sideBar.map(
-    (item, index) => ({
-      key: String(index + 1),
-      icon: React.createElement(item.icon),
-      label: item.label,
-      onClick: item?.onClick,
-    })
-  );
 
   useEffect(() => {
     SetIsLoading(true);
@@ -246,60 +218,8 @@ export default function Dashboard() {
 
   return (
     <div>
-      <Layout hasSider>
-        <Sider
-          style={{
-            overflow: "auto",
-            height: "100vh",
-            position: "fixed",
-            left: 0,
-            top: 0,
-            bottom: 0,
-          }}
-        >
-          <div
-            className="logo"
-            style={{
-              height: "50px",
-              marginTop: "16px",
-              marginLeft: "3px",
-              marginRight: "3px",
-              marginBottom: "16px",
-              borderRadius: "5px",
-              background: "rgba(255, 255, 255, 0.2)",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <img
-                src={userData?.profilePic}
-                alt="profilePic"
-                style={{
-                  borderRadius: "50%",
-                  height: "40px",
-                  width: "40px",
-                  objectFit: "cover",
-                  marginLeft: "3px",
-                  marginRight: "5px",
-                }}
-              ></img>
-              <p
-                style={{
-                  fontWeight: "bold",
-                  marginTop: "12px",
-                  color: "white",
-                }}
-              >
-                {userData?.name}
-              </p>
-            </div>
-          </div>
-          <Menu
-            theme="dark"
-            mode="inline"
-            defaultSelectedKeys={["1"]}
-            items={sideBarItems}
-          />
-        </Sider>
+      <Layout >
+        <SideBar/>
         <Layout
           className="site-layout"
           style={{

@@ -140,6 +140,12 @@ export default function Checkout() {
         const SubTotal = res.reduce((acc, index) => {
           return +acc + +index?.totalPrice;
         }, 0);
+        if(!res?.length) {
+         openNotification({ message: "Continue shopping", type: "success" })
+         setTimeout(() => {
+          navigate("/");
+        }, 1000);
+        }
         dispatch(orderProduct([...res]));
         setSubTotal(SubTotal);
         dispatch(addToCart([...res]));

@@ -3,9 +3,9 @@ import React, { Suspense } from "react";
 import { LoadingOutlined } from '@ant-design/icons';
 import { Spin } from "antd";
 
-const Login = React.lazy(() => import("./components/common/login"))
-const Signup = React.lazy(() => import("./components/common/signup"))
-const EmailVerification = React.lazy(() => import("./components/common/emailVerification"))
+const Login = React.lazy(() => import("./components/Auth/login"))
+const Signup = React.lazy(() => import("./components/Auth/signup"))
+const EmailVerification = React.lazy(() => import("./components/Auth/emailVerification"))
 const ForgotPassword = React.lazy(() => import("./components/users/forgotPassword"))
 const ResetPassword = React.lazy(() => import("./components/users/resetPassword"))
 const Dashboard = React.lazy(() => import("./components/product/dashboard"))
