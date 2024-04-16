@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   LogoutOutlined,
   UserOutlined,
@@ -6,12 +6,13 @@ import {
 } from "@ant-design/icons";
 import { Layout, Menu, notification } from "antd";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 const { Sider } = Layout;
 
 const SideBar = () => {
   const userData = useSelector((state) => state?.auth?.userData);
   const navigate = useNavigate();
+  const location = useLocation();
   const [api, contextHolder] = notification.useNotification();
 
   const handelProduct = () => {
@@ -24,13 +25,16 @@ const SideBar = () => {
       navigate("/login");
     }, 500);
   };
+  const handelMyOrder = () => {
+    navigate("/my-order")
+  }
   let sideBar = [
-    { icon: DropboxOutlined, label: "Product", onClick: handelProduct },
-    { icon: UserOutlined, label: "My order" },
-    { icon: LogoutOutlined, label: "Logout", onClick: handleLogout },
+    { icon: DropboxOutlined, label: "Product", onClick: handelProduct, path: "/" },
+    { icon: UserOutlined, label: "My order", onClick: handelMyOrder, path: "/my-order" },
+    { icon: LogoutOutlined, label: "Logout", onClick: handleLogout, path: "/login" },
   ];
   const sideBarItems = sideBar.map((item, index) => ({
-    key: String(index + 1),
+    key: item.path,
     icon: React.createElement(item.icon),
     label: item.label,
     onClick: item?.onClick,
@@ -94,6 +98,7 @@ const SideBar = () => {
           theme="dark"
           mode="inline"
           defaultSelectedKeys={["1"]}
+          selectedKeys={[location.pathname]}
           items={sideBarItems}
         />
       </Sider>

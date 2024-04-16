@@ -12,7 +12,6 @@ import {
   EyeOutlined,
   DeleteOutlined,
   EditOutlined,
-  ShoppingCartOutlined,
   ShoppingOutlined,
   ShoppingFilled,
 } from "@ant-design/icons";
@@ -23,9 +22,7 @@ import {
   Card,
   Col,
   Row,
-  Button,
   Avatar,
-  Badge,
   Tooltip,
 } from "antd";
 import EditProduct from "./editProduct";
@@ -33,8 +30,9 @@ import { cartAPI } from "../../services/cartApi";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../slice/auth/auth.slices";
 import SideBar from "../common/sideBar";
+import Headers from "../common/header";
 
-const { Header, Content, Sider } = Layout;
+const { Content, Sider } = Layout;
 const { Meta } = Card;
 
 export default function Dashboard() {
@@ -218,40 +216,20 @@ export default function Dashboard() {
 
   return (
     <div>
-      <Layout >
-        <SideBar/>
+      <Layout>
+        <SideBar />
         <Layout
           className="site-layout"
           style={{
             marginLeft: 200,
           }}
         >
-          <Header
-            className="site-layout-background"
-            style={{
-              padding: 0,
-              background: "#fff",
-            }}
-          >
-            <div style={{ position: "absolute", right: 140, marginTop: "2px" }}>
-              <Badge count={cartCount}>
-                <ShoppingCartOutlined
-                  key="cart"
-                  style={{ fontSize: "28px" }}
-                  onClick={() =>
-                    viewCartModal ? showCart(false) : showCart(true)
-                  }
-                />
-              </Badge>
-            </div>
-            <Button
-              style={{ position: "absolute", top: 15, right: 10 }}
-              type="primary"
-              onClick={() => showAddProduct(true)}
-            >
-              Add product
-            </Button>
-          </Header>
+          <Headers
+            cartCount={cartCount}
+            setViewCartModal={setViewCartModal}
+            setAddProductModal={setAddProductModal}
+            viewCartModal={viewCartModal}
+          />
           <Layout>
             <Content
               onClick={() => showCart(false)}
