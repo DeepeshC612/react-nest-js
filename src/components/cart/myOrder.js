@@ -1,21 +1,16 @@
-import { Button, Layout, Modal, Table, notification } from "antd";
+import { Layout, Table, notification } from "antd";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { getEnv } from "../../config/config";
-import { cartAPI } from "../../services/cartApi";
-import { addToCart } from "../../slice/auth/auth.slices";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import SideBar from "../common/sideBar";
-import Headers from "../common/header";
 import { Content, Header } from "antd/es/layout/layout";
 
-function MyOrder({ visible, onCancel, product, setCartCount, setCartList }) {
+function MyOrder() {
   const [api, contextHolder] = notification.useNotification();
   const [orderList, setOrderList] = useState([]);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const openNotification = (data) => {
     api.open({
@@ -23,6 +18,7 @@ function MyOrder({ visible, onCancel, product, setCartCount, setCartList }) {
       message: data?.message,
     });
   };
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -37,13 +33,9 @@ function MyOrder({ visible, onCancel, product, setCartCount, setCartList }) {
         );
         const { status, data } = res?.data;
         if (status) {
-            if(data?.length) {
-                let newData = data.map((item, index) => {
-                    item.key = index + 1
-                    return item
-                })
-                setOrderList(data)
-            }
+          if (data?.length) {
+            setOrderList(data);
+          }
         }
       } catch (err) {
         const data = {
@@ -60,61 +52,53 @@ function MyOrder({ visible, onCancel, product, setCartCount, setCartList }) {
     }
     fetchData();
   }, []);
-  const handleCartCount = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const payload = {
-        productId: product?.id,
-        quantity: 1,
-      };
-      const res = await cartAPI("", token, "POST", payload);
-      if (res) {
-        dispatch(addToCart([...res]));
-        setCartList([...res]);
-        setCartCount(res?.length);
-      }
-    } catch (err) {
-      const data = {
-        message: err?.response?.data?.error ?? err?.response?.data?.message,
-        type: "error",
-      };
-      if (data.message === "Unauthorized") {
-        setTimeout(() => {
-          navigate("/login");
-        }, 1000);
-      }
-      openNotification(data);
-    }
-  };
+
   let columns = [
     {
-      title: "Order Id",
+      title: "OrderId",
       dataIndex: "orderId",
-      key: "orderId"
+      key: "orderId",
+      fixed: "left",
+      render: (text) => <p style={{margin: '10px'}}>#{text}</p>,
+      width: 70,
     },
     {
-      title: "Product Image",
       dataIndex: "image",
       key: "image",
-      render: (img) => <img src={img} style={{ height: "50px", width:"50px", objectFit: "cover", borderRadius: '50%' }}></img>,
+      width: 65,
+      render: (img) => (
+        <img
+          src={img}
+          alt={img}
+          style={{
+            height: "50px",
+            width: "50px",
+            objectFit: "cover",
+            borderRadius: "50%",
+          }}
+        ></img>
+      ),
+      fixed: "left",
     },
     {
       title: "Product name",
       dataIndex: "productName",
       key: "productName",
-      render: (text) => <a>{text}</a>,
+      render: (text) => <p>{text}</p>,
+      fixed: "left",
+      width: 100
     },
     {
       title: "Ordered Date",
       dataIndex: "orderedDate",
       key: "orderedDate",
-      render: (text) => <a>{text.split("T")[0]}</a>,
+      render: (text) => <p style={{color: 'Highlight'}}>{text.split("T")[0]}</p>,
     },
     {
       title: "Tracking status",
       dataIndex: "productNames",
       key: "productNames",
-      render: (text) => <a>Into the shipment</a>,
+      render: () => <p style={{color: 'green'}}>Ready to ship</p>,
     },
     {
       title: "Product quantity",
@@ -125,16 +109,18 @@ function MyOrder({ visible, onCancel, product, setCartCount, setCartList }) {
       title: "Product price",
       dataIndex: "price",
       key: "price",
+      render: (text) => <p>{text} ₹</p>
     },
     {
       title: "Order Total",
       dataIndex: "totalPrice",
       key: "totalPrice",
-    //   render: (text) => <a>{text}</a>,
+      render: (text) => <p style={{color: 'Highlight'}}>{text} ₹</p>
     },
   ];
   return (
     <>
+     {contextHolder}
       <Layout>
         <SideBar />
         <Layout
@@ -148,7 +134,9 @@ function MyOrder({ visible, onCancel, product, setCartCount, setCartList }) {
               padding: 0,
               background: "#fff",
             }}
-          />
+          >
+            <p style={{ fontWeight: 'bold', marginLeft: "10px"}}>My Order list</p> 
+          </Header>
           <Content
             style={{
               margin: "10px 16px 0",
@@ -158,7 +146,18 @@ function MyOrder({ visible, onCancel, product, setCartCount, setCartList }) {
               background: "#fff",
             }}
           >
-            <Table columns={columns} dataSource={orderList}/>
+            <Table
+              columns={columns}
+              dataSource={orderList}
+              size="small"
+              pagination={{
+                pageSize: 50,
+              }}
+              scroll={{
+                x: 900,
+                y: 600,
+              }}
+            />
           </Content>
         </Layout>
       </Layout>
