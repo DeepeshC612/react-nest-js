@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   LogoutOutlined,
   UserOutlined,
   DropboxOutlined,
+  ProfileOutlined
 } from "@ant-design/icons";
 import { Layout, Menu, notification } from "antd";
 import { useSelector } from "react-redux";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 const { Sider } = Layout;
 
 const SideBar = () => {
@@ -28,9 +29,13 @@ const SideBar = () => {
   const handelMyOrder = () => {
     navigate("/my-order")
   }
+  const handelMyProfile = () => {
+    navigate("/profile")
+  }
   let sideBar = [
     { icon: DropboxOutlined, label: "Product", onClick: handelProduct, path: "/" },
-    { icon: UserOutlined, label: "My order", onClick: handelMyOrder, path: "/my-order" },
+    { icon: UserOutlined, label: "My profile", onClick: handelMyProfile, path: "/profile" },
+    { icon: ProfileOutlined, label: "My order", onClick: handelMyOrder, path: "/my-order" },
     { icon: LogoutOutlined, label: "Logout", onClick: handleLogout, path: "/login" },
   ];
   const sideBarItems = sideBar.map((item, index) => ({
