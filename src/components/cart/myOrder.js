@@ -135,7 +135,7 @@ function MyOrder() {
               background: "#fff",
             }}
           >
-            <p style={{ fontWeight: 'bold', marginLeft: "10px"}}>My Order list</p> 
+            <p style={{ fontWeight: 'bold', marginLeft: "18px"}}>My Order list</p> 
           </Header>
           <Content
             style={{
