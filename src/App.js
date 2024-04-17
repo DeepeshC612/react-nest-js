@@ -11,6 +11,7 @@ const ResetPassword = React.lazy(() => import("./components/users/resetPassword"
 const Dashboard = React.lazy(() => import("./components/product/dashboard"))
 const Checkout = React.lazy(() => import("./components/cart/checkout"))
 const MyOrder = React.lazy(() => import("./components/cart/myOrder"))
+const MyProfile = React.lazy(() => import("./components/users/myProfile"))
 function App() {
   const antIcon = (
     <LoadingOutlined
@@ -39,6 +40,7 @@ function App() {
         <Route path="/" element={<Dashboard/>} />
         <Route path="/checkout" element={<Checkout/>} />
         <Route path="/my-order" element={<MyOrder/>} />
+        <Route path="/profile" element={<MyProfile/>} />
       </Routes>
       </Suspense>
     </Router>
