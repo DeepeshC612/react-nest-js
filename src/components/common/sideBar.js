@@ -35,8 +35,8 @@ const SideBar = () => {
   let sideBar = []
   if (userData?.role === "admin") {
     sideBar = [
-      { icon: DropboxOutlined, label: "Product", onClick: handelProduct, path: "/" },
-      { icon: UserOutlined, label: "My profile", onClick: handelMyProfile, path: "/profile" },
+      { icon: DropboxOutlined, label: "Products", onClick: handelProduct, path: "/" },
+      { icon: UserOutlined, label: "Admin profile", onClick: handelMyProfile, path: "/profile" },
       { icon: LogoutOutlined, label: "Logout", onClick: handleLogout, path: "/login" },
     ];
   } else {

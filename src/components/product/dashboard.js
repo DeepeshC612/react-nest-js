@@ -67,7 +67,7 @@ export default function Dashboard() {
         const { status, data } = res?.data;
         if (status) {
           setProducts(data);
-          if(userData?.role !== 'admin') {
+          if (userData?.role !== "admin") {
             let cart = await cartAPI("", token, "GET", "");
             if (cart) {
               setCartList(cart);
@@ -280,52 +280,90 @@ export default function Dashboard() {
                               style={{ height: "200px", objectFit: "cover" }}
                             />
                           }
-                          actions={[
-                            <Tooltip title="View product">
-                              <EyeOutlined
-                                key="view"
-                                style={{ fontSize: "18px" }}
-                                onClick={() => showViewProduct(true, e?.id)}
-                              />
-                            </Tooltip>,
-                            <Tooltip title="Edit product">
-                              <EditOutlined
-                                key="edit"
-                                style={{ fontSize: "18px" }}
-                                onClick={() => {
-                                  showEditProduct(true, e);
-                                }}
-                              />
-                            </Tooltip>,
-                            <div style={{ marginTop: "3px" }}>
-                              {checkBagClicked(e?.id) ? (
-                                <Tooltip title="Remove from Cart">
-                                  <ShoppingFilled
-                                    key="cartRemove"
-                                    style={{ fontSize: "20px" }}
-                                    onClick={() => handleIconClick(e?.id, "")}
-                                  />
-                                </Tooltip>
-                              ) : (
-                                <Tooltip title="Add to Cart">
-                                  <ShoppingOutlined
-                                    key="cartAdd"
-                                    style={{ fontSize: "20px" }}
-                                    onClick={() =>
-                                      handleIconClick(e?.id, "add")
-                                    }
-                                  />
-                                </Tooltip>
-                              )}
-                            </div>,
-                            <Tooltip title="Delete product">
-                              <DeleteOutlined
-                                key="deleted"
-                                style={{ fontSize: "18px" }}
-                                onClick={() => showDeleteProduct(true, e?.id)}
-                              />
-                            </Tooltip>,
-                          ]}
+                          actions={
+                            userData?.role !== "admin"
+                              ? [
+                                  <Tooltip title="View product">
+                                    <EyeOutlined
+                                      key="view"
+                                      style={{ fontSize: "18px" }}
+                                      onClick={() =>
+                                        showViewProduct(true, e?.id)
+                                      }
+                                    />
+                                  </Tooltip>,
+                                  <Tooltip title="Edit product">
+                                    <EditOutlined
+                                      key="edit"
+                                      style={{ fontSize: "18px" }}
+                                      onClick={() => {
+                                        showEditProduct(true, e);
+                                      }}
+                                    />
+                                  </Tooltip>,
+                                  <div style={{ marginTop: "3px" }}>
+                                    {checkBagClicked(e?.id) ? (
+                                      <Tooltip title="Remove from Cart">
+                                        <ShoppingFilled
+                                          key="cartRemove"
+                                          style={{ fontSize: "20px" }}
+                                          onClick={() =>
+                                            handleIconClick(e?.id, "")
+                                          }
+                                        />
+                                      </Tooltip>
+                                    ) : (
+                                      <Tooltip title="Add to Cart">
+                                        <ShoppingOutlined
+                                          key="cartAdd"
+                                          style={{ fontSize: "20px" }}
+                                          onClick={() =>
+                                            handleIconClick(e?.id, "add")
+                                          }
+                                        />
+                                      </Tooltip>
+                                    )}
+                                  </div>,
+                                  <Tooltip title="Delete product">
+                                    <DeleteOutlined
+                                      key="deleted"
+                                      style={{ fontSize: "18px" }}
+                                      onClick={() =>
+                                        showDeleteProduct(true, e?.id)
+                                      }
+                                    />
+                                  </Tooltip>,
+                                ]
+                              : [
+                                  <Tooltip title="View product">
+                                    <EyeOutlined
+                                      key="view"
+                                      style={{ fontSize: "18px" }}
+                                      onClick={() =>
+                                        showViewProduct(true, e?.id)
+                                      }
+                                    />
+                                  </Tooltip>,
+                                  <Tooltip title="Edit product">
+                                    <EditOutlined
+                                      key="edit"
+                                      style={{ fontSize: "18px" }}
+                                      onClick={() => {
+                                        showEditProduct(true, e);
+                                      }}
+                                    />
+                                  </Tooltip>,
+                                  <Tooltip title="Delete product">
+                                    <DeleteOutlined
+                                      key="deleted"
+                                      style={{ fontSize: "18px" }}
+                                      onClick={() =>
+                                        showDeleteProduct(true, e?.id)
+                                      }
+                                    />
+                                  </Tooltip>,
+                                ]
+                          }
                         >
                           <Meta
                             avatar={
