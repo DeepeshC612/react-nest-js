@@ -34,7 +34,12 @@ function MyOrder() {
         const { status, data } = res?.data;
         if (status) {
           if (data?.length) {
-            setOrderList(data);
+            let newData = data?.map((item, index) => {
+              item.key = index + 1
+              return item
+            })
+            console.log(newData);
+            setOrderList(newData);
           }
         }
       } catch (err) {
