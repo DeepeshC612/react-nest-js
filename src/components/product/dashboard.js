@@ -27,7 +27,7 @@ import {
 } from "antd";
 import EditProduct from "./editProduct";
 import { cartAPI } from "../../services/cartApi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../slice/auth/auth.slices";
 import SideBar from "../common/sideBar";
 import Headers from "../common/header";
@@ -36,6 +36,7 @@ const { Content, Sider } = Layout;
 const { Meta } = Card;
 
 export default function Dashboard() {
+  const userData = useSelector((state) => state?.auth?.userData);
   const [product, setProduct] = useState({});
   const [catList, setCartList] = useState([]);
   const [products, setProducts] = useState([]);
@@ -66,17 +67,19 @@ export default function Dashboard() {
         const { status, data } = res?.data;
         if (status) {
           setProducts(data);
-          let cart = await cartAPI("", token, "GET", "");
-          if (cart) {
-            setCartList(cart);
-            dispatch(addToCart(cart));
-            cart?.map((e) => {
-              handleIsClicked(e?.productId);
-              return e;
-            });
+          if(userData?.role !== 'admin') {
+            let cart = await cartAPI("", token, "GET", "");
+            if (cart) {
+              setCartList(cart);
+              dispatch(addToCart(cart));
+              cart?.map((e) => {
+                handleIsClicked(e?.productId);
+                return e;
+              });
+            }
+            setCartCount(cart?.length);
           }
           SetIsLoading(false);
-          setCartCount(cart?.length);
         }
       } catch (err) {
         const data = {

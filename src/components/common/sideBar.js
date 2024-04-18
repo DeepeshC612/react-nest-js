@@ -32,12 +32,21 @@ const SideBar = () => {
   const handelMyProfile = () => {
     navigate("/profile")
   }
-  let sideBar = [
-    { icon: DropboxOutlined, label: "Product", onClick: handelProduct, path: "/" },
-    { icon: UserOutlined, label: "My profile", onClick: handelMyProfile, path: "/profile" },
-    { icon: ProfileOutlined, label: "My order", onClick: handelMyOrder, path: "/my-order" },
-    { icon: LogoutOutlined, label: "Logout", onClick: handleLogout, path: "/login" },
-  ];
+  let sideBar = []
+  if (userData?.role === "admin") {
+    sideBar = [
+      { icon: DropboxOutlined, label: "Product", onClick: handelProduct, path: "/" },
+      { icon: UserOutlined, label: "My profile", onClick: handelMyProfile, path: "/profile" },
+      { icon: LogoutOutlined, label: "Logout", onClick: handleLogout, path: "/login" },
+    ];
+  } else {
+    sideBar = [
+      { icon: DropboxOutlined, label: "Product", onClick: handelProduct, path: "/" },
+      { icon: UserOutlined, label: "My profile", onClick: handelMyProfile, path: "/profile" },
+      { icon: ProfileOutlined, label: "My order", onClick: handelMyOrder, path: "/my-order" },
+      { icon: LogoutOutlined, label: "Logout", onClick: handleLogout, path: "/login" },
+    ];
+  }
   const sideBarItems = sideBar.map((item, index) => ({
     key: item.path,
     icon: React.createElement(item.icon),
@@ -75,7 +84,7 @@ const SideBar = () => {
             background: "rgba(255, 255, 255, 0.2)",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", cursor: "pointer" }} onClick={() => navigate("/profile")}>
             <img
               src={userData?.profilePic}
               alt="profilePic"
